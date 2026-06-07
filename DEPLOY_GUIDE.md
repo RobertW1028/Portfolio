@@ -1,8 +1,44 @@
 # 部署说明：GitHub + Netlify / Vercel
 
-这份说明写给完全不熟悉代码的人。照着做就可以把当前 Vite + React 艺术作品集网站发布到网上。
+这个网站已经成功部署到 Netlify。以后主要流程是：本地修改 → 本地检查 → commit → push → Netlify 自动部署。
 
-## 1. 本地预览网站
+## 1. 当前部署配置
+
+项目是 Vite + React。
+
+`package.json` 里应该有这些命令：
+
+```json
+"dev": "vite",
+"build": "vite build",
+"preview": "vite preview"
+```
+
+当前 Netlify 配置在：
+
+`netlify.toml`
+
+内容是：
+
+```toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+```
+
+Netlify 的 Build command 应该是：
+
+```bash
+npm run build
+```
+
+Netlify 的 Publish directory 应该是：
+
+```bash
+dist
+```
+
+## 2. 本地预览网站
 
 在项目根目录打开终端，运行：
 
@@ -10,31 +46,33 @@
 npm.cmd run dev
 ```
 
-终端会显示一个本地网址，通常是：
-
-`http://127.0.0.1:5173/`
-
-打开它就能预览网站。
-
 如果你的 PowerShell 可以直接运行 npm，也可以用：
 
 ```bash
 npm run dev
 ```
 
-## 2. 上线前检查
+终端会显示本地网址，通常是：
 
-上线前运行：
+`http://127.0.0.1:5173/`
+
+## 3. 上线前检查
+
+每次准备更新线上网站前，建议先运行：
 
 ```bash
 npm.cmd run build
 ```
 
-如果成功，会生成 `dist` 文件夹。
+如果 PowerShell 可以直接运行 npm，也可以用：
 
-如果看到报错，先不要上线，把报错修好后再部署。
+```bash
+npm run build
+```
 
-## 3. 本地检查生产版本
+构建成功后，会生成 `dist` 文件夹。
+
+## 4. 本地检查生产版本
 
 构建成功后，可以运行：
 
@@ -44,9 +82,72 @@ npm.cmd run preview
 
 这个命令会预览 `dist` 里的正式版本。
 
-## 4. 哪些文件要上传到 GitHub
+## 5. 当前路由方式
 
-一般要上传这些：
+当前项目使用 `HashRouter`。
+
+线上页面地址会像这样：
+
+- 首页：`https://你的站点.netlify.app/#/`
+- 作品页：`https://你的站点.netlify.app/#/works`
+- Bio 页面：`https://你的站点.netlify.app/#/about`
+- Contact 页面：`https://你的站点.netlify.app/#/contact`
+
+因为路由在 `#` 后面，Netlify 刷新页面时通常不会出现 404。
+
+当前不需要添加 `_redirects`，也不需要为了路由修改 `netlify.toml`。
+
+## 6. 如何测试线上页面
+
+部署完成后，在浏览器分别打开：
+
+`https://你的站点.netlify.app/#/works`
+
+`https://你的站点.netlify.app/#/about`
+
+`https://你的站点.netlify.app/#/contact`
+
+然后刷新页面。
+
+如果使用的是 `#/works` 这种地址，刷新后正常显示就说明 HashRouter 工作正常。
+
+## 7. 如何修改 Netlify site name
+
+1. 打开 Netlify。
+2. 进入你的网站项目。
+3. 点击 `Site configuration` 或 `Site settings`。
+4. 找到 `Site details`。
+5. 点击 `Change site name`。
+6. 输入新的站点名。
+
+修改后，你的网站地址会变成：
+
+`https://新的名字.netlify.app`
+
+注意：如果你之前把旧网址发给别人，改名后旧网址可能不再适用。
+
+## 8. 以后更新网站的流程
+
+每次改文字、Bio、作品、图片或视频后，按这个流程：
+
+1. 本地修改文件。
+2. 运行：
+
+```bash
+npm.cmd run build
+```
+
+3. 如果构建成功，用 GitHub Desktop commit。
+4. push 到 GitHub。
+5. Netlify 会自动检测到 GitHub 更新，并重新部署网站。
+
+简单记：
+
+本地修改 → `npm.cmd run build` → commit → push → Netlify 自动部署。
+
+## 9. 哪些文件要上传到 GitHub
+
+一般要上传：
 
 - `src/`
 - `public/`
@@ -61,9 +162,7 @@ npm.cmd run preview
 - `CODEX_PROMPTS.md`
 - `DEPLOY_GUIDE.md`
 
-简单理解：除了被 `.gitignore` 忽略的文件，项目代码和内容文件都应该上传。
-
-## 5. 哪些文件不要上传到 GitHub
+## 10. 哪些文件不要上传到 GitHub
 
 不要上传：
 
@@ -72,152 +171,43 @@ npm.cmd run preview
 - `.env`
 - 任何包含密码、token、secret 的文件
 
-## 6. 为什么不要上传 node_modules
+`node_modules` 很大，而且可以通过 `npm install` 重新安装。
 
-`node_modules` 是依赖安装后的文件夹，非常大，而且可以通过 `package.json` 和 `package-lock.json` 自动重新安装。
+`dist` 是构建结果，Netlify 会自动生成。除非你选择手动拖拽部署，否则通常不要上传它。
 
-上传它会让 GitHub 仓库变得很重，也容易产生奇怪问题。
+## 11. 如何更新作品
 
-## 7. 为什么通常不要上传 dist
-
-`dist` 是构建结果，可以通过 `npm run build` 自动生成。
-
-Netlify 和 Vercel 会在服务器上自动运行构建命令，然后发布生成的 `dist`。
-
-除非你明确选择“手动部署 dist 文件夹”，否则通常不要把 `dist` 上传到 GitHub。
-
-## 8. 用 GitHub Desktop 上传项目到 GitHub
-
-1. 打开 GitHub Desktop。
-2. 选择 `File` -> `Add Local Repository...`。
-3. 选择这个项目文件夹。
-4. 如果提示还不是 Git 仓库，可以选择创建仓库。
-5. 在左下角填写 commit 信息，比如 `Prepare portfolio for deployment`。
-6. 点击 `Commit to main`。
-7. 点击 `Publish repository`。
-8. 确认不要勾选上传隐私文件或奇怪的大文件。
-9. 发布完成后，你会在 GitHub 网站上看到这个仓库。
-
-每次更新作品或文字后，都需要再次 commit 和 push。
-
-## 9. 用 Netlify 连接 GitHub 部署
-
-1. 打开 Netlify。
-2. 选择 `Add new site`。
-3. 选择 `Import an existing project`。
-4. 连接 GitHub。
-5. 选择你的作品集仓库。
-6. Build command 填：
-
-```bash
-npm run build
-```
-
-7. Publish directory 填：
-
-```bash
-dist
-```
-
-8. 点击 Deploy。
-
-本项目根目录已经有 `netlify.toml`，里面也写了同样的配置：
-
-```toml
-[build]
-  command = "npm run build"
-  publish = "dist"
-```
-
-## 10. 用 Vercel 连接 GitHub 部署
-
-1. 打开 Vercel。
-2. 选择 `Add New Project`。
-3. 导入你的 GitHub 仓库。
-4. Framework Preset 通常会自动识别为 Vite。
-5. Build Command 填：
-
-```bash
-npm run build
-```
-
-6. Output Directory 填：
-
-```bash
-dist
-```
-
-7. Install Command 可以保持默认：
-
-```bash
-npm install
-```
-
-8. 点击 Deploy。
-
-当前项目使用 `HashRouter`，页面地址会像 `#/works`、`#/about`、`#/contact`，一般不需要额外配置 `vercel.json`。
-
-## 11. 关于刷新页面 404
-
-当前项目使用 `HashRouter`。
-
-作品页地址类似：
-
-`https://你的域名/#/works`
-
-Bio 页面地址类似：
-
-`https://你的域名/#/about`
-
-Contact 页面地址类似：
-
-`https://你的域名/#/contact`
-
-因为路由在 `#` 后面，静态平台刷新页面时通常不会 404。
-
-## 12. 网站上线后如何更新作品
-
-1. 把新图片放到：
+图片放在：
 
 `public/images/works/`
 
-2. 把新视频放到：
+视频放在：
 
 `public/videos/works/`
 
-3. 修改作品数据：
+作品数据放在：
 
 `src/data/works.json`
 
-或者运行：
+也可以运行添加作品工具：
 
 ```bash
 npm.cmd run add-work
 ```
 
-4. 本地运行：
+添加后记得运行：
 
 ```bash
 npm.cmd run build
 ```
 
-5. 在 GitHub Desktop 里 commit。
-6. push 到 GitHub。
-7. Netlify 或 Vercel 会自动重新部署。
+然后 commit 和 push。
 
-## 13. 为什么每次更新后要 commit 和 push
+## 12. 图片路径规则
 
-Netlify 和 Vercel 是从 GitHub 仓库读取代码来部署的。
+`works.json` 里的 `image` 只写文件名。
 
-如果你只在电脑里改了文件，但没有 commit 和 push，GitHub 上的仓库不会更新，线上网站也不会更新。
-
-## 14. 如果图片上线后不显示，检查这些地方
-
-第一，图片是否真的放在：
-
-`public/images/works/`
-
-第二，`src/data/works.json` 里的 `image` 是否只写文件名，比如：
+正确：
 
 ```json
 "image": "13.jpg"
@@ -226,35 +216,159 @@ Netlify 和 Vercel 是从 GitHub 仓库读取代码来部署的。
 不要写：
 
 ```json
+"image": "public/images/works/13.jpg"
+```
+
+不要写电脑本地路径：
+
+```json
 "image": "C:\\Users\\..."
 ```
 
-第三，文件名大小写是否完全一致。
+组件会自动拼接成：
 
-如果文件叫 `13.JPG`，但数据里写 `13.jpg`，有些线上服务器会认为这是两个不同文件。
+`/images/works/13.jpg`
 
-第四，是否忘记 commit 和 push。
+## 13. 如果线上图片不显示
 
-第五，部署平台是否已经重新部署完成。
+检查这些地方：
 
-第六，如果是视频封面图，也要放在 `public/images/works/`。
+1. 图片是否真的放在 `public/images/works/`。
+2. `works.json` 里的 `image` 是否只写文件名。
+3. 文件名大小写是否完全一致。
+4. 是否用了空格、中文或特殊符号。
+5. 是否已经 commit 和 push 到 GitHub。
+6. Netlify 是否已经重新部署完成。
+7. 浏览器是否缓存了旧页面，可以强制刷新试试。
 
-## 15. 如果视频上线后不显示，检查这些地方
+如果文件叫 `13.JPG`，但数据里写 `13.jpg`，线上服务器可能会认为这是两个不同文件。
+
+## 14. 如果线上视频不显示
 
 视频文件应该放在：
 
 `public/videos/works/`
 
-`src/data/works.json` 里的 `video` 只写文件名：
+`works.json` 里的 `video` 只写文件名：
 
 ```json
 "video": "performance-001.mp4"
 ```
 
-视频作品通常还需要：
+视频作品通常需要：
 
 ```json
 "mediaType": "video"
 ```
 
-封面图写在 `image` 字段里，并放到 `public/images/works/`。
+视频封面图写在 `image` 字段里，并放在：
+
+`public/images/works/`
+
+## 15. 用 Vercel 部署时怎么填
+
+如果你以后选择 Vercel：
+
+Build Command 填：
+
+```bash
+npm run build
+```
+
+Output Directory 填：
+
+```bash
+dist
+```
+
+Install Command 保持默认：
+
+```bash
+npm install
+```
+
+当前项目使用 `HashRouter`，一般不需要额外创建 `vercel.json`。
+
+## 16. 别人如何通过 GitHub 上传照片或视频
+
+别人贡献作品时，不要直接去 Netlify 上传文件。
+
+正确流程是：
+
+1. 在 GitHub 上创建新分支。
+2. 上传图片或视频文件。
+3. 修改 `src/data/works.json`。
+4. 创建 Pull Request。
+5. 我审核 Pull Request。
+6. 合并后 Netlify 自动部署正式网站。
+
+图片上传位置：
+
+`public/images/works/`
+
+视频上传位置：
+
+`public/videos/works/`
+
+视频封面图也上传到：
+
+`public/images/works/`
+
+作品数据写在：
+
+`src/data/works.json`
+
+`image` 和 `video` 只写文件名，不写文件夹路径，不写电脑本地路径。
+
+正确：
+
+```json
+"image": "my-photo-01.jpg"
+```
+
+错误：
+
+```json
+"image": "C:\\Users\\Name\\Desktop\\my-photo-01.jpg"
+```
+
+图片作品写：
+
+```json
+"mediaType": "image"
+```
+
+视频作品写：
+
+```json
+"mediaType": "video"
+```
+
+`featured: true` 表示首页精选。
+
+`featured: false` 表示只在作品页显示。
+
+`featuredOrder` 控制首页精选排序，数字越小越靠前。
+
+Pull Request 创建后，GitHub Actions 会自动运行：
+
+```bash
+npm install
+npm run validate-content
+npm run build
+```
+
+Netlify 也会生成 Deploy Preview。审核时可以打开预览链接，检查图片、视频和作品数据是否正常。
+
+如果图片或视频不显示，优先检查：
+
+1. 文件是否放对文件夹。
+2. `works.json` 里是否只写文件名。
+3. 文件名大小写是否完全一致。
+4. 是否忘记修改 `works.json`。
+5. GitHub Actions 是否通过。
+6. Netlify Deploy Preview 是否已经完成。
+
+更详细的贡献说明见：
+
+`CONTRIBUTOR_GUIDE.md`

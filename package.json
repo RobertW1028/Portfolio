@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "add-work": "node scripts/add-work.mjs"
+    "add-work": "node scripts/add-work.mjs",
+    "validate-content": "node scripts/validate-content.mjs",
+    "validate-pr-scope": "node scripts/validate-pr-scope.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",

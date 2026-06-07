@@ -113,7 +113,8 @@
     "video": "",
     "mediaType": "image",
     "category": "painting",
-    "featured": false
+    "featured": false,
+    "featuredOrder": null
   },
   {
     "id": "work-008",
@@ -125,7 +126,8 @@
     "video": "",
     "mediaType": "image",
     "category": "photography",
-    "featured": false
+    "featured": false,
+    "featuredOrder": null
   },
   {
     "id": "work-009",
@@ -137,6 +139,7 @@
     "video": "",
     "mediaType": "image",
     "category": "installation",
-    "featured": false
+    "featured": false,
+    "featuredOrder": null
   }
 ]
