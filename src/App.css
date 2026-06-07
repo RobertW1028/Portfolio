@@ -1,0 +1,38 @@
+/* 整个应用的全局样式 */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 基础链接样式 */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #666;
+}
+
+/* 按钮样式 */
+button {
+  cursor: pointer;
+  border: none;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+/* 图片响应式 */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
