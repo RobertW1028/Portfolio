@@ -3,17 +3,17 @@
 
 export const siteContent = {
   // 网站标题：显示在浏览器标签页，也可显示在子页面左上角。
-  siteTitle: 'Art Portfolio',
+  siteTitle: 'Yuezheng Wang',
 
   // 姓名：显示在首页最醒目的位置。
-  name: '你的名字',
+  name: '',
 
   // 首页身份短句：显示在姓名下方。
-  tagline: '艺术家 / 设计师',
+  tagline: '',
 
   // 首页简介：建议保持简短，1-2 句话就好。
   intro:
-    '欢迎来到我的个人作品集。我专注于创意表达和视觉艺术的探索，这里展示了我近期的一些创作和项目。',
+    '',
 
   // About / Bio：关于我的介绍。
   // paragraphs 里每一行是一段文字，需要新增段落就多加一行。
