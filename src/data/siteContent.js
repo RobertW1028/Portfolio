@@ -23,8 +23,6 @@ export const siteContent = {
       '',
       '',
     ],
-    skillsTitle: '',
-    skills: ['', '', '', ''],
   },
 
   // 联系方式：修改邮箱或社交媒体链接就在这里。
