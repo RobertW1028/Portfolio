@@ -31,7 +31,7 @@ export default function Contact() {
             </div>
           </div>
           <p className="contact-note">
-            如需合作、展览或项目交流，可以通过邮箱或社交媒体联系我。
+            For collaborations, exhibitions, or project inquiries, please contact me via email or social media.
           </p>
         </div>
       </div>
