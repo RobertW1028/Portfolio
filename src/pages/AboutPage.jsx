@@ -6,7 +6,7 @@ export default function AboutPage() {
   return (
     <main className="content-page">
       <div className="container">
-        <Link className="back-link" to="/">返回首页</Link>
+        <Link className="back-link" to="/">HOME</Link>
       </div>
       <About />
     </main>
