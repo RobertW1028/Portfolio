@@ -14,12 +14,6 @@ export default function About() {
             {about.paragraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
-            <h2>{about.skillsTitle}</h2>
-            <ul className="skills-list">
-              {about.skills.map((skill) => (
-                <li key={skill}>{skill}</li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>
