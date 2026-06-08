@@ -3,7 +3,7 @@
 
 export const siteContent = {
   // 网站标题：会显示在浏览器标签页和导航栏左上角。
-  siteTitle: '',
+  siteTitle: 'Wayne',
 
   // 我的姓名：会显示在首页最醒目的位置。
   name: 'Yuezheng Wang',
@@ -23,8 +23,6 @@ export const siteContent = {
       '',
       '',
     ],
-    skillsTitle: '',
-    skills: ['', '', '', ''],
   },
 
   // 联系方式：修改邮箱或社交媒体链接就在这里。
