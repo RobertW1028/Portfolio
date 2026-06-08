@@ -6,7 +6,7 @@ export const siteContent = {
   siteTitle: '',
 
   // 我的姓名：会显示在首页最醒目的位置。
-  name: 'Wayne Wang',
+  name: 'Yuezheng Wang',
 
   // 我的身份 / 简介短句：会显示在首页姓名下方。
   tagline: '',
@@ -18,13 +18,13 @@ export const siteContent = {
   // About / Bio：关于我的详细介绍。
   // 如果想新增段落，就在 paragraphs 数组里多加一行文字。
   about: {
-    heading: '我是谁',
+    heading: 'Yuezheng Wang',
     paragraphs: [
       '我是一名热爱视觉表达的创作者，关注材料、图像与空间之间的关系。',
       '我的作品通常从日常观察出发，通过绘画、摄影、装置或影像的方式，探索记忆、情绪和环境之间的连接。',
     ],
     skillsTitle: '我的专长',
-    skills: ['视觉艺术创作', '平面设计', '数字艺术', '创意思维'],
+    skills: ['', '', '', ''],
   },
 
   // 联系方式：修改邮箱或社交媒体链接就在这里。
@@ -36,11 +36,11 @@ export const siteContent = {
         url: 'https://www.instagram.com/wayne_yuezhengwang/',
       },
       {
-        label: 'LinkedIn',
-        url: 'https://www.linkedin.com/',
+        label: '',
+        url: '',
       },
       {
-        label: '其他',
+        label: '',
         url: '#',
       },
     ],
