@@ -9,8 +9,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(__dirname, '..')
 const worksPath = path.join(projectRoot, 'src', 'data', 'works.json')
 const worksImageDir = path.join(projectRoot, 'public', 'images', 'works')
-const worksVideoDir = path.join(projectRoot, 'public', 'videos', 'works')
-const allowedCategories = ['painting', 'photography', 'installation', 'video', 'other']
+const allowedCategories = ['video', 'film', 'installation', 'photography', 'other']
+
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
 
 function nextWorkId(works) {
   const numbers = works
@@ -40,78 +47,84 @@ function cleanFileName(fileName) {
   return path.basename(fileName.trim())
 }
 
-function parseYes(answer) {
-  return ['y', 'yes', 'true', '是', '首页', '精选'].includes(answer.trim().toLowerCase())
+function parseList(value, separator) {
+  return value
+    .split(separator)
+    .map((item) => item.trim())
+    .filter(Boolean)
 }
 
-async function askFeaturedOrder(rl) {
-  const answer = (await rl.question('首页排序数字是多少？数字越小越靠前，直接回车则排在后面：')).trim()
-
-  if (!answer) {
-    return undefined
-  }
-
-  const order = Number(answer)
-
-  if (!Number.isFinite(order)) {
-    console.log('排序不是有效数字，这个作品会排在有排序数字的作品后面。')
-    return undefined
-  }
-
-  return order
+function parseYes(answer) {
+  return ['y', 'yes', 'true', '是', '首页', '精选'].includes(answer.trim().toLowerCase())
 }
 
 async function main() {
   const works = JSON.parse(await fs.readFile(worksPath, 'utf8'))
   const rl = readline.createInterface({ input, output })
 
-  console.log('开始添加新作品。按提示输入内容即可。')
-  console.log('分类可选：painting, photography, installation, video, other')
-  console.log('图片请放在 public/images/works/，这里只填写文件名。')
+  console.log('开始添加 video / film project。')
+  console.log('poster 和 stills 请放在 public/images/works/，这里只填写文件名。')
 
-  const mediaAnswer = (await rl.question('这是图片作品还是视频作品？输入 image 或 video，直接回车默认为 image：')).trim().toLowerCase()
-  const mediaType = mediaAnswer === 'video' ? 'video' : 'image'
   const title = await askRequired(rl, '作品标题是什么？')
+  const slugAnswer = (await rl.question('slug 是什么？直接回车会根据标题自动生成：')).trim()
+  const slug = slugAnswer ? slugify(slugAnswer) : slugify(title)
   const year = await askRequired(rl, '年份是什么？')
-  const medium = await askRequired(rl, '媒介是什么？')
-  const description = await askRequired(rl, '简介是什么？')
-
-  let image = ''
-  let video = ''
-
-  if (mediaType === 'video') {
-    image = cleanFileName(await askRequired(rl, '视频封面图文件名是什么？例如 performance-001-cover.jpg：'))
-    video = cleanFileName(await askRequired(rl, '视频文件名是什么？例如 performance-001.mp4：'))
-  } else {
-    image = cleanFileName(await askRequired(rl, '图片文件名是什么？例如 my-photo-01.jpg：'))
-  }
-
-  const categoryInput = (await rl.question('分类是什么？直接回车默认为 other：')).trim()
-  const category = allowedCategories.includes(categoryInput)
-    ? categoryInput
-    : mediaType === 'video'
-      ? 'video'
-      : 'other'
-  const featured = parseYes(await rl.question('是否显示在首页？输入 y 表示是，直接回车表示只在全部作品页显示：'))
-  const featuredOrder = featured ? await askFeaturedOrder(rl) : undefined
+  const duration = (await rl.question('片长是什么？例如 8:32，没有可直接回车：')).trim()
+  const format = (await rl.question('格式是什么？例如 Single-channel video, color, sound：')).trim()
+  const medium = (await rl.question('medium 是什么？例如 Video / Film / Installation：')).trim()
+  const poster = cleanFileName(await askRequired(rl, 'poster 文件名是什么？例如 project-poster.jpg：'))
+  const vimeoEmbedUrl = (await rl.question('Vimeo embed URL 是什么？例如 https://player.vimeo.com/video/123456789，没有可直接回车：')).trim()
+  const synopsis = await askRequired(rl, 'synopsis 简介是什么？')
+  const credits = parseList(await rl.question('credits 是什么？多条用英文分号 ; 分隔，直接回车可留空：'), ';')
+  const stills = parseList(await rl.question('stills 文件名有哪些？多个用英文逗号 , 分隔，直接回车可留空：'), ',')
+    .map(cleanFileName)
+  const categoryInput = (await rl.question('category 是什么？可选 video, film, installation, photography, other，直接回车默认为 film：')).trim()
+  const category = allowedCategories.includes(categoryInput) ? categoryInput : 'film'
+  const featured = parseYes(await rl.question('是否 featured？输入 y 表示是，直接回车表示否：'))
+  const featuredOrderAnswer = featured
+    ? (await rl.question('featuredOrder 是多少？数字越小越靠前，直接回车为 null：')).trim()
+    : ''
+  const featuredOrder = featuredOrderAnswer ? Number(featuredOrderAnswer) : null
 
   rl.close()
 
-  const newWork = {
-    id: nextWorkId(works),
-    title,
-    year,
-    medium,
-    description,
-    image,
-    video,
-    mediaType,
-    category,
-    featured,
+  if (works.some((work) => work.slug === slug)) {
+    console.log(`提示：slug "${slug}" 已存在，请稍后手动改成唯一 slug。`)
   }
 
-  if (featuredOrder !== undefined) {
-    newWork.featuredOrder = featuredOrder
+  if (!existsSync(path.join(worksImageDir, poster))) {
+    console.log(`提示：还没有找到 poster：public/images/works/${poster}`)
+  }
+
+  stills.forEach((still) => {
+    if (!existsSync(path.join(worksImageDir, still))) {
+      console.log(`提示：还没有找到 still：public/images/works/${still}`)
+    }
+  })
+
+  if (vimeoEmbedUrl && !vimeoEmbedUrl.startsWith('https://player.vimeo.com/video/')) {
+    console.log('提示：vimeoEmbedUrl 看起来不像 Vimeo player 地址。请使用 https://player.vimeo.com/video/... 这种格式。')
+  }
+
+  const newWork = {
+    id: nextWorkId(works),
+    slug,
+    title,
+    year,
+    duration,
+    format,
+    medium,
+    poster,
+    image: poster,
+    stills,
+    vimeoEmbedUrl,
+    synopsis,
+    description: synopsis,
+    credits,
+    screeningHistory: [],
+    category,
+    featured,
+    featuredOrder,
   }
 
   works.push(newWork)
@@ -119,29 +132,8 @@ async function main() {
 
   console.log(`已添加作品：${newWork.title}`)
   console.log(`作品编号：${newWork.id}`)
-
-  const imagePath = path.join(worksImageDir, image)
-
-  if (!existsSync(imagePath)) {
-    console.log(`提示：还没有找到图片或封面图 ${image}`)
-    console.log(`请把图片放到：public/images/works/${image}`)
-    console.log('这里只需要写文件名，不要写 C:\\Users\\... 这种电脑本地路径。')
-  }
-
-  if (mediaType === 'video') {
-    const videoPath = path.join(worksVideoDir, video)
-
-    if (!existsSync(videoPath)) {
-      console.log(`提示：还没有找到视频 ${video}`)
-      console.log(`请把视频放到：public/videos/works/${video}`)
-    }
-  }
-
-  if (featured && featuredOrder === undefined) {
-    console.log('提示：这个作品会显示在首页，但因为没有 featuredOrder，会排在有排序数字的精选作品后面。')
-  }
-
-  console.log('完成后运行 npm run dev 检查页面。')
+  console.log(`详情页地址：#/works/${newWork.slug}`)
+  console.log('完成后运行 npm run validate-content 和 npm run build 检查。')
 }
 
 main().catch((error) => {

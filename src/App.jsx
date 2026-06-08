@@ -3,6 +3,7 @@ import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-d
 import Navbar from './components/Navbar'
 import HomePage from './pages/HomePage'
 import AllWorksPage from './pages/AllWorksPage'
+import WorkDetail from './pages/WorkDetail'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import { siteContent } from './data/siteContent'
@@ -22,6 +23,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/works" element={<AllWorksPage />} />
+        <Route path="/works/:slug" element={<WorkDetail />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

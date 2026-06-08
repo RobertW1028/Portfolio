@@ -372,3 +372,38 @@ Netlify 也会生成 Deploy Preview。审核时可以打开预览链接，检查
 更详细的贡献说明见：
 
 `CONTRIBUTOR_GUIDE.md`
+
+## 17. Vimeo 视频作品部署注意事项
+
+大部分 film / video 作品建议上传到 Vimeo。
+
+网站只保存：
+
+- Vimeo player URL
+- poster 图片
+- film stills / installation views
+
+不要把大视频直接放进 GitHub 仓库。
+
+`vimeoEmbedUrl` 只写：
+
+```text
+https://player.vimeo.com/video/123456789
+```
+
+不要粘贴完整 iframe。
+
+如果 Vimeo 设置了嵌入域名限制，请允许：
+
+`yuezhengwang.com`
+
+`www.yuezhengwang.com`
+
+添加 Vimeo 作品后，本地运行：
+
+```bash
+npm.cmd run validate-content
+npm.cmd run build
+```
+
+然后 commit、push，Netlify 会自动重新部署。

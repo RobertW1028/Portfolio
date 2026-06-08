@@ -14,6 +14,10 @@ export function getWorkImageSrc(image) {
   return `/images/works/${image}`
 }
 
+export function getWorkPosterSrc(work) {
+  return getWorkImageSrc(work.poster || work.image)
+}
+
 export function getWorkVideoSrc(video) {
   if (!video) {
     return ''
@@ -24,6 +28,10 @@ export function getWorkVideoSrc(video) {
   }
 
   return `/videos/works/${video}`
+}
+
+export function getWorkBySlug(slug) {
+  return works.find((work) => work.slug === slug)
 }
 
 export function getFeaturedWorks(limit = 6) {

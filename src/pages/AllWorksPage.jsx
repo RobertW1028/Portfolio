@@ -6,7 +6,7 @@ import './AllWorksPage.css'
 
 const categoryLabels = {
   all: '全部',
-  painting: 'Painting',
+  film: 'Film',
   photography: 'Photography',
   installation: 'Installation',
   video: 'Video',
@@ -33,7 +33,7 @@ export default function AllWorksPage() {
           <Link className="back-link" to="/">返回首页</Link>
           <h1>作品</h1>
           <p>
-            这里收录作品列表。你可以通过分类查看绘画、摄影、装置、影像和其他项目。
+            这里收录 video / film projects、摄影、装置和其他作品。点击作品进入详情页。
           </p>
         </div>
       </section>
@@ -55,7 +55,7 @@ export default function AllWorksPage() {
 
           <div className="works-grid">
             {visibleWorks.map((work) => (
-              <WorkCard key={work.id} work={work} allowVideoPlayback />
+              <WorkCard key={work.id} work={work} />
             ))}
           </div>
         </div>

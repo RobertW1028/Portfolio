@@ -1,0 +1,79 @@
+.work-detail-page {
+  min-height: 100vh;
+  background-color: #fff;
+  padding: 3rem 0 5rem;
+}
+
+.work-detail-container {
+  max-width: 980px;
+}
+
+.work-detail-header {
+  margin: 2.4rem 0 2.2rem;
+}
+
+.work-detail-header h1 {
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1.18;
+  margin-bottom: 0.9rem;
+}
+
+.work-detail-meta,
+.work-detail-medium {
+  color: #666;
+  line-height: 1.7;
+}
+
+.work-detail-section {
+  max-width: 760px;
+  margin-top: 2.6rem;
+}
+
+.work-detail-section h2 {
+  font-size: 1rem;
+  margin-bottom: 0.9rem;
+  font-weight: 600;
+}
+
+.work-detail-section p,
+.work-detail-section li {
+  color: #666;
+  line-height: 1.8;
+}
+
+.work-detail-section ul {
+  list-style: none;
+}
+
+.stills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.2rem;
+}
+
+.stills-grid img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background-color: #eee;
+}
+
+.work-not-found {
+  padding: 5rem 0;
+  text-align: center;
+}
+
+.work-not-found h1 {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .work-detail-page {
+    padding-top: 2rem;
+  }
+
+  .work-detail-header h1 {
+    font-size: 1.9rem;
+  }
+}

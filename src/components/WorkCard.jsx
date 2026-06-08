@@ -1,52 +1,35 @@
 import { useState } from 'react'
-import { getWorkImageSrc, getWorkVideoSrc } from '../data/works'
+import { Link } from 'react-router-dom'
+import { getWorkPosterSrc } from '../data/works'
 import './Works.css'
 
-export default function WorkCard({ work, allowVideoPlayback = false }) {
+export default function WorkCard({ work }) {
   const [imageFailed, setImageFailed] = useState(false)
-  const [videoFailed, setVideoFailed] = useState(false)
-  const imageSrc = getWorkImageSrc(work.image)
-  const videoSrc = getWorkVideoSrc(work.video)
-  const isVideo = work.mediaType === 'video'
-  const canPlayVideo = isVideo && allowVideoPlayback && videoSrc && !videoFailed
+  const posterSrc = getWorkPosterSrc(work)
+  const meta = [work.year, work.duration || work.format].filter(Boolean).join(' · ')
 
   return (
     <article className="work-item">
-      <div className="work-image">
-        {canPlayVideo ? (
-          <video
-            className="work-video"
-            controls
-            preload="metadata"
-            poster={imageSrc}
-            onError={() => setVideoFailed(true)}
-          >
-            <source src={videoSrc} type="video/mp4" />
-            你的浏览器暂时不能播放这个视频。
-          </video>
-        ) : !imageFailed && imageSrc ? (
-          <>
+      <Link className="work-card-link" to={`/works/${work.slug}`}>
+        <div className="work-image">
+          {!imageFailed && posterSrc ? (
             <img
-              src={imageSrc}
+              src={posterSrc}
               alt={work.title}
               onError={() => setImageFailed(true)}
             />
-            {isVideo && <span className="media-badge">Video</span>}
-          </>
-        ) : (
-          <div className="work-image-placeholder">
-            <span>{work.title}</span>
-            {isVideo && <span className="media-badge media-badge-placeholder">Video</span>}
-          </div>
-        )}
-      </div>
-      <div className="work-info">
-        <h3>{work.title}</h3>
-        <p className="work-meta">
-          {work.year} · {work.medium}
-        </p>
-        <p>{work.description}</p>
-      </div>
+          ) : (
+            <div className="work-image-placeholder">
+              <span>{work.title}</span>
+            </div>
+          )}
+        </div>
+        <div className="work-info">
+          <h3>{work.title}</h3>
+          <p className="work-meta">{meta}</p>
+          {work.format && <p>{work.format}</p>}
+        </div>
+      </Link>
     </article>
   )
 }

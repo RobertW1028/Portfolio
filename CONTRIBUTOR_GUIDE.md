@@ -275,3 +275,63 @@ Pull Request 合并后，Netlify 会自动更新正式网站。
 - `featured` 是否写成 true 或 false
 - 没有直接修改 `main` 分支
 - 没有修改网站代码，除非事先获得同意
+
+## 16. 如何添加 Vimeo 视频作品
+
+这个网站现在主要适合提交 video / film projects。
+
+请先把完整视频上传到 Vimeo，再把 Vimeo player URL 写进作品数据。
+
+不要把大视频直接上传到 GitHub。
+
+推荐提交内容：
+
+- poster：放在 `public/images/works/`
+- film stills：放在 `public/images/works/`
+- Vimeo player URL：写在 `src/data/works.json` 的 `vimeoEmbedUrl`
+
+Vimeo player URL 应该像这样：
+
+```text
+https://player.vimeo.com/video/123456789
+```
+
+不要粘贴整段 iframe。
+
+如果 Vimeo 限制嵌入域名，请允许：
+
+`yuezhengwang.com`
+
+`www.yuezhengwang.com`
+
+作品数据示例：
+
+```json
+{
+  "id": "work-014",
+  "slug": "new-film-project",
+  "title": "New Film Project",
+  "year": "2026",
+  "duration": "8:32",
+  "format": "Single-channel video, color, sound",
+  "medium": "Video / Film",
+  "poster": "new-film-poster.jpg",
+  "image": "new-film-poster.jpg",
+  "stills": ["new-film-still-01.jpg", "new-film-still-02.jpg"],
+  "vimeoEmbedUrl": "https://player.vimeo.com/video/123456789",
+  "synopsis": "这里写简短作品简介。",
+  "description": "这里写简短作品简介。",
+  "credits": ["Director: Name", "Sound: Name"],
+  "screeningHistory": [],
+  "category": "film",
+  "featured": false,
+  "featuredOrder": null
+}
+```
+
+提交前请运行或等待 GitHub 自动运行：
+
+```bash
+npm run validate-content
+npm run build
+```

@@ -7,28 +7,32 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(__dirname, '..')
 const worksPath = path.join(projectRoot, 'src', 'data', 'works.json')
 const imageDir = path.join(projectRoot, 'public', 'images', 'works')
-const videoDir = path.join(projectRoot, 'public', 'videos', 'works')
 
 const requiredFields = [
   'id',
+  'slug',
   'title',
   'year',
+  'duration',
+  'format',
   'medium',
-  'description',
+  'poster',
   'image',
-  'video',
-  'mediaType',
+  'stills',
+  'vimeoEmbedUrl',
+  'synopsis',
+  'description',
+  'credits',
+  'screeningHistory',
   'category',
   'featured',
   'featuredOrder',
 ]
-const allowedMediaTypes = ['image', 'video']
-const allowedCategories = ['painting', 'photography', 'installation', 'video', 'other']
+const allowedCategories = ['video', 'film', 'installation', 'photography', 'other']
 const allowedImageExtensions = ['.jpg', '.jpeg', '.png', '.webp']
-const allowedVideoExtensions = ['.mp4', '.webm']
 const imageWarningSize = 5 * 1024 * 1024
-const videoWarningSize = 25 * 1024 * 1024
 const safeFileNamePattern = /^[a-z0-9._-]+$/
+const slugPattern = /^[a-z0-9-]+$/
 
 const errors = []
 const warnings = []
@@ -49,21 +53,7 @@ function hasPathPrefix(value) {
   return value.startsWith('/') || value.includes('/')
 }
 
-function isFileNameSafe(value) {
-  return safeFileNamePattern.test(value)
-}
-
-function formatSize(bytes) {
-  return `${(bytes / 1024 / 1024).toFixed(1)}MB`
-}
-
-function checkTextField(work, field) {
-  if (typeof work[field] !== 'string' || !work[field].trim()) {
-    addError(`${work.id || '未知作品'}：${field} 必须填写文字。`)
-  }
-}
-
-function checkFileNameOnly(work, fieldName, value, allowedExtensions) {
+function checkFileNameOnly(work, fieldName, value) {
   const label = work.id || '未知作品'
 
   if (typeof value !== 'string' || !value.trim()) {
@@ -76,43 +66,38 @@ function checkFileNameOnly(work, fieldName, value, allowedExtensions) {
   }
 
   if (hasPathPrefix(value)) {
-    addError(`${label}：${fieldName} 不要包含 public/images/works/ 或 public/videos/works/，请只写文件名。当前值：${value}`)
+    addError(`${label}：${fieldName} 不要写 public/images/works/，请只写文件名。当前值：${value}`)
   }
 
-  if (!isFileNameSafe(value)) {
-    addError(`${label}：${fieldName} 文件名建议只使用英文小写、数字、短横线、下划线和点号，不能有空格、中文或特殊符号。当前值：${value}`)
+  if (!safeFileNamePattern.test(value)) {
+    addError(`${label}：${fieldName} 文件名只能使用英文小写、数字、短横线、下划线和点号，不能有空格、中文或特殊符号。当前值：${value}`)
   }
 
   const extension = path.extname(value).toLowerCase()
-  if (!allowedExtensions.includes(extension)) {
-    addError(`${label}：${fieldName} 扩展名不正确。允许：${allowedExtensions.join(', ')}。当前值：${value}`)
+  if (!allowedImageExtensions.includes(extension)) {
+    addError(`${label}：${fieldName} 扩展名不正确。允许：${allowedImageExtensions.join(', ')}。当前值：${value}`)
   }
 
   return true
 }
 
-function checkFileExistsAndSize(work, fieldName, fileName, directory, warningSize) {
-  const label = work.id || '未知作品'
-  const filePath = path.join(directory, fileName)
+function checkImageFile(work, fieldName, fileName) {
+  const filePath = path.join(imageDir, fileName)
 
   if (!existsSync(filePath)) {
-    addError(`${label}：找不到 ${fieldName} 文件：${path.relative(projectRoot, filePath)}`)
+    addError(`${work.id}：找不到 ${fieldName}：public/images/works/${fileName}`)
     return
   }
 
   const fileSize = statSync(filePath).size
-  if (fileSize > warningSize) {
-    addWarning(`${label}：${fieldName} 文件较大：${fileName} (${formatSize(fileSize)})，可能影响网页加载速度。`)
+  if (fileSize > imageWarningSize) {
+    addWarning(`${work.id}：${fieldName} 文件较大：${fileName}，可能影响网页加载速度。`)
   }
 }
 
-function checkFeaturedOrder(work) {
-  if (work.featuredOrder === null) {
-    return
-  }
-
-  if (typeof work.featuredOrder !== 'number' || !Number.isFinite(work.featuredOrder)) {
-    addError(`${work.id || '未知作品'}：featuredOrder 只能是数字或 null。`)
+function checkStringField(work, field) {
+  if (typeof work[field] !== 'string') {
+    addError(`${work.id || '未知作品'}：${field} 必须是字符串。`)
   }
 }
 
@@ -133,8 +118,7 @@ async function main() {
   }
 
   const ids = new Set()
-  const imageReferences = new Map()
-  const videoReferences = new Map()
+  const slugs = new Set()
 
   works.forEach((work, index) => {
     const label = work.id || `第 ${index + 1} 个作品`
@@ -145,21 +129,27 @@ async function main() {
       }
     })
 
-    ;['id', 'title', 'year', 'medium', 'description', 'image', 'mediaType', 'category'].forEach((field) => {
+    ;['id', 'slug', 'title', 'year', 'duration', 'format', 'medium', 'poster', 'image', 'vimeoEmbedUrl', 'synopsis', 'description', 'category'].forEach((field) => {
       if (field in work) {
-        checkTextField(work, field)
+        checkStringField(work, field)
       }
     })
 
     if (work.id) {
       if (ids.has(work.id)) {
-        addError(`${work.id}：id 重复。每个作品 id 必须唯一。`)
+        addError(`${work.id}：id 重复。`)
       }
       ids.add(work.id)
     }
 
-    if (work.mediaType && !allowedMediaTypes.includes(work.mediaType)) {
-      addError(`${label}：mediaType 只能写 image 或 video。当前值：${work.mediaType}`)
+    if (work.slug) {
+      if (!slugPattern.test(work.slug)) {
+        addError(`${label}：slug 只能使用英文小写、数字和短横线。当前值：${work.slug}`)
+      }
+      if (slugs.has(work.slug)) {
+        addError(`${label}：slug 重复。`)
+      }
+      slugs.add(work.slug)
     }
 
     if (work.category && !allowedCategories.includes(work.category)) {
@@ -167,64 +157,61 @@ async function main() {
     }
 
     if ('featured' in work && typeof work.featured !== 'boolean') {
-      addError(`${label}：featured 只能是 true 或 false，不能写成字符串。`)
+      addError(`${label}：featured 只能是 true 或 false。`)
     }
 
-    if ('video' in work && typeof work.video !== 'string') {
-      addError(`${label}：video 必须是字符串。图片作品请写空字符串。`)
+    if (work.featuredOrder !== null && (typeof work.featuredOrder !== 'number' || !Number.isFinite(work.featuredOrder))) {
+      addError(`${label}：featuredOrder 只能是数字或 null。`)
     }
 
-    checkFeaturedOrder(work)
+    if (!Array.isArray(work.stills)) {
+      addError(`${label}：stills 必须是数组。`)
+    }
 
-    if (work.image && checkFileNameOnly(work, 'image', work.image, allowedImageExtensions)) {
-      const previousId = imageReferences.get(work.image)
-      if (previousId) {
-        addError(`${label}：image 文件名 ${work.image} 已经被 ${previousId} 引用，请避免重复引用。`)
-      } else {
-        imageReferences.set(work.image, work.id || label)
+    if (!Array.isArray(work.credits)) {
+      addError(`${label}：credits 必须是数组。`)
+    }
+
+    if (!Array.isArray(work.screeningHistory)) {
+      addError(`${label}：screeningHistory 必须是数组。`)
+    }
+
+    if (work.poster && checkFileNameOnly(work, 'poster', work.poster)) {
+      checkImageFile(work, 'poster', work.poster)
+    }
+
+    if (work.image && checkFileNameOnly(work, 'image', work.image)) {
+      if (work.poster && work.image !== work.poster) {
+        addWarning(`${label}：image 与 poster 不一致。旧组件兼容字段通常建议等于 poster。`)
       }
-
-      checkFileExistsAndSize(work, '图片或封面图', work.image, imageDir, imageWarningSize)
     }
 
-    if (work.mediaType === 'image') {
-      if (work.video) {
-        addError(`${label}：图片作品的 video 必须留空字符串。`)
-      }
-      return
-    }
-
-    if (work.mediaType === 'video') {
-      if (!work.video) {
-        addError(`${label}：视频作品必须填写 video 文件名。`)
-        return
-      }
-
-      if (checkFileNameOnly(work, 'video', work.video, allowedVideoExtensions)) {
-        const previousId = videoReferences.get(work.video)
-        if (previousId) {
-          addError(`${label}：video 文件名 ${work.video} 已经被 ${previousId} 引用，请避免重复引用。`)
-        } else {
-          videoReferences.set(work.video, work.id || label)
+    if (Array.isArray(work.stills)) {
+      work.stills.forEach((still) => {
+        if (checkFileNameOnly(work, 'stills', still)) {
+          checkImageFile(work, 'still', still)
         }
+      })
+    }
 
-        checkFileExistsAndSize(work, '视频', work.video, videoDir, videoWarningSize)
+    if (work.vimeoEmbedUrl) {
+      if (isLocalComputerPath(work.vimeoEmbedUrl)) {
+        addError(`${label}：vimeoEmbedUrl 不要写电脑本地路径。`)
+      }
+      if (!work.vimeoEmbedUrl.startsWith('https://player.vimeo.com/video/')) {
+        addError(`${label}：vimeoEmbedUrl 必须以 https://player.vimeo.com/video/ 开头，不要粘贴整段 iframe。`)
       }
     }
   })
 
   if (warnings.length > 0) {
     console.warn('作品内容检查警告：')
-    warnings.forEach((warning) => {
-      console.warn(`- ${warning}`)
-    })
+    warnings.forEach((warning) => console.warn(`- ${warning}`))
   }
 
   if (errors.length > 0) {
     console.error('作品内容检查发现错误：')
-    errors.forEach((error) => {
-      console.error(`- ${error}`)
-    })
+    errors.forEach((error) => console.error(`- ${error}`))
     process.exit(1)
   }
 
