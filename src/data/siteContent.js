@@ -20,10 +20,10 @@ export const siteContent = {
   about: {
     heading: 'Yuezheng Wang',
     paragraphs: [
-      '我是一名热爱视觉表达的创作者，关注材料、图像与空间之间的关系。',
-      '我的作品通常从日常观察出发，通过绘画、摄影、装置或影像的方式，探索记忆、情绪和环境之间的连接。',
+      '',
+      '',
     ],
-    skillsTitle: '我的专长',
+    skillsTitle: '',
     skills: ['', '', '', ''],
   },
 
