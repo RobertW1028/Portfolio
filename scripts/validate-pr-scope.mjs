@@ -1,10 +1,10 @@
 import { execFileSync } from 'node:child_process'
 
-// Fill these in with real GitHub usernames.
-// Trusted maintainers may change site content, pages, styles, routing, and docs.
+// 请把下面两个占位符改成真实 GitHub 用户名。
+// Trusted maintainer 可以修改网站内容、页面、组件、CSS、路由和文档。
 const trustedMaintainers = [
-  'RobertW1028',
-  'yuezhengwang66',
+  'YOUR_GITHUB_USERNAME',
+  'FRIEND_GITHUB_USERNAME',
 ]
 
 const approvalLabel = 'site-change-approved'
@@ -98,7 +98,7 @@ console.log(`PR 作者：${prAuthor || '未检测到'}`)
 console.log(`PR 标签：${prLabels.length > 0 ? prLabels.join(', ') : '无'}`)
 
 if (isTrustedMaintainer) {
-  console.log('检测到 trusted maintainer，跳过普通作品投稿的严格文件范围限制。')
+  console.log('检测到 trusted maintainer，允许修改网站内容、页面、组件、样式和路由。')
 } else if (hasApprovalLabel) {
   console.log(`检测到 ${approvalLabel} 标签，允许本次 PR 修改网站代码或配置。`)
 }
@@ -123,8 +123,8 @@ const blockedFiles = changedFiles.filter(
 )
 
 if (blockedFiles.length > 0) {
-  console.error('普通作品投稿只能修改作品数据、图片、视频和贡献说明文档。')
-  console.error('下面这些文件不允许在普通作品投稿 PR 中修改：')
+  console.error('普通投稿者只能修改作品数据、图片、视频和贡献说明文档。')
+  console.error('下面这些文件不允许在普通投稿者 PR 中修改：')
   blockedFiles.forEach((file) => {
     console.error(`- ${file}`)
   })
@@ -132,4 +132,4 @@ if (blockedFiles.length > 0) {
   process.exit(1)
 }
 
-console.log('普通作品投稿修改范围检查通过。')
+console.log('普通投稿者修改范围检查通过。')

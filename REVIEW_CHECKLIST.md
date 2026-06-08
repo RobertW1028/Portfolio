@@ -2,21 +2,21 @@
 
 审核 PR 时，先判断提交者属于哪一类：
 
-- 普通 collaborator / 投稿者：通常只添加作品，只应修改作品数据和素材文件。
+- 普通投稿者：通常只添加作品，只应修改作品数据和素材文件。
 - Trusted maintainer：可以维护网站内容、页面、样式和结构，但仍然应该通过 PR 和自动检查。
 
-## 1. 先看 GitHub 自动检查
+## 1. 先看 GitHub Actions
 
 PR 页面底部的 Checks 应该通过：
 - `Validate content`
 - `Validate pull request scope`
 - `Build`
 
-如果是 push 到 `main`，通常只运行内容检查和 build，不需要运行 scope 检查。
+push 到 `main` 时通常只运行内容检查和 build，不运行 scope 检查。
 
 如果检查失败，不要合并。先点进失败项，看错误提示。
 
-## 2. 普通投稿者 PR 应该怎么判断
+## 2. 普通投稿者 PR
 
 普通投稿者通常只应修改：
 - `src/data/works.json`
@@ -40,14 +40,14 @@ PR 页面底部的 Checks 应该通过：
 
 如果确实需要普通投稿者改网站代码，请由 owner 或 trusted maintainer 添加 `site-change-approved` 标签，并认真审核改动。
 
-## 3. Trusted maintainer PR 应该怎么判断
+## 3. Trusted maintainer PR
 
 Trusted maintainer 可以修改：
+- 网站内容
+- `src/data/siteContent.js`
 - 作品数据
 - 图片和必要的小视频
-- 个人信息内容
-- 页面
-- 组件
+- 页面组件
 - CSS
 - 路由
 - 文档
@@ -60,7 +60,9 @@ Trusted maintainer 可以修改：
 - Works 页面正常显示作品卡片
 - 单个作品详情页可以根据 slug 打开
 - Bio 和 Contact 页面正常
-- 图片路径和 Vimeo URL 没有被写错
+- 图片路径没有被写成本地路径
+- Vimeo URL 没有被写错
+- 作品详情页里的 Vimeo iframe 正常加载
 
 如果 trusted maintainer 修改了下面文件，要特别认真看 diff：
 - `package.json`
@@ -115,6 +117,8 @@ Vimeo iframe 应该只在作品详情页加载，不应该在首页或 Works 列
 
 ## 7. Netlify Deploy Preview
 
+仓库变成 public 后，Netlify 通常可以正常为朋友的 PR 创建 Deploy Preview。
+
 打开 Netlify Deploy Preview，检查：
 - 首页是否仍然极简
 - `/works` 是否显示作品列表
@@ -124,6 +128,8 @@ Vimeo iframe 应该只在作品详情页加载，不应该在首页或 Works 列
 - 图片、poster、stills 是否显示
 - Vimeo 视频是否能播放
 - 手机端排版是否没有明显破坏
+
+如果 Netlify 没有自动重新部署，可以在 Netlify 后台找到对应站点，进入 Deploys，点击 Retry deploy 或 Trigger deploy。
 
 ## 8. 合并前结论
 

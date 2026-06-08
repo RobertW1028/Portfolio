@@ -22,8 +22,8 @@ https://yuezhengwang.com
 
 Codex 审核 Pull Request 时，请先判断提交者类型：
 
-- 普通 collaborator / 投稿者：通常只添加作品，只应修改作品数据、图片、必要的小视频和说明文档。
-- Trusted maintainer：可以修改网站内容、页面结构、组件、CSS、路由和文档，但仍然必须通过内容检查和 build。
+- 普通投稿者：通常只添加作品，只应修改作品数据、图片、必要的小视频和说明文档。
+- Trusted maintainer：可以修改网站内容、`siteContent`、页面结构、组件、CSS、路由、作品数据、Vimeo 项目内容和文档，但仍然必须通过内容检查和 build。
 
 ## 普通投稿者 PR
 
@@ -54,13 +54,16 @@ Trusted maintainer PR 可以修改代码和样式，但 Codex 仍然必须检查
 - GitHub Actions 是否全部通过
 - `npm run validate-content` 是否通过
 - `npm run build` 是否通过
+- Netlify Deploy Preview 是否能打开
 - 首页是否仍然保持极简入口
 - Works 页面是否显示作品卡片
 - 作品详情页是否可以根据 slug 打开
 - Bio 和 Contact 页面是否正常
 - 图片路径是否仍然只使用文件名
+- 是否没有出现 `C:\Users\...` 这种本地路径
 - Vimeo URL 是否仍然使用 `https://player.vimeo.com/video/...`
 - Vimeo iframe 是否只在作品详情页加载
+- 手机端布局是否没有明显破坏
 
 如果 trusted maintainer 修改以下文件，请提醒 reviewer 认真审核：
 - `package.json`
