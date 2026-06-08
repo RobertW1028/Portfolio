@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process'
 
-// 请把下面两个占位符改成真实 GitHub 用户名。
 // Trusted maintainer 可以修改网站内容、页面、组件、CSS、路由和文档。
+// 这里的值必须和 GitHub PR 页面显示的登录用户名完全一致。
 const trustedMaintainers = [
   'RobertW1028',
   'yuezhengwang66',
