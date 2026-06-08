@@ -29,11 +29,11 @@ export const siteContent = {
 
   // 联系方式：修改邮箱或社交媒体链接就在这里。
   contact: {
-    email: 'your.email@example.com',
+    email: 'wyz15905@gmail.com',
     socialLinks: [
       {
         label: 'Instagram',
-        url: 'https://www.instagram.com/',
+        url: 'https://www.instagram.com/wayne_yuezhengwang/',
       },
       {
         label: 'LinkedIn',
