@@ -6,7 +6,7 @@ export const siteContent = {
   siteTitle: 'Yuezheng Wang',
 
   // 姓名：显示在首页最醒目的位置。
-  name: '',
+  name: 'Yuezheng Wang',
 
   // 首页身份短句：显示在姓名下方。
   tagline: '',
