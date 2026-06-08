@@ -3,8 +3,8 @@ import { execFileSync } from 'node:child_process'
 // 请把下面两个占位符改成真实 GitHub 用户名。
 // Trusted maintainer 可以修改网站内容、页面、组件、CSS、路由和文档。
 const trustedMaintainers = [
-  'YOUR_GITHUB_USERNAME',
-  'FRIEND_GITHUB_USERNAME',
+  'RobertW1028',
+  'yuezhengwang66',
 ]
 
 const approvalLabel = 'site-change-approved'

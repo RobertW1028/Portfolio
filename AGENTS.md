@@ -25,6 +25,8 @@ Codex 审核 Pull Request 时，请先判断提交者类型：
 - 普通投稿者：通常只添加作品，只应修改作品数据、图片、必要的小视频和说明文档。
 - Trusted maintainer：可以修改网站内容、`siteContent`、页面结构、组件、CSS、路由、作品数据、Vimeo 项目内容和文档，但仍然必须通过内容检查和 build。
 
+Codex review 不应建议随便使用 bypass rules。检查失败时，应先说明失败原因和修复方式。
+
 ## 普通投稿者 PR
 
 普通添加作品通常只允许修改：
