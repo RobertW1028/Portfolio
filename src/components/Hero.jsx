@@ -12,7 +12,7 @@ export default function Hero() {
           <p className="hero-title">{siteContent.tagline}</p>
           <p className="hero-description">{siteContent.intro}</p>
           <div className="hero-actions">
-            <Link className="hero-cta" to="/works">探索我的作品</Link>
+            <Link className="hero-cta" to="/works">Works</Link>
             <div className="hero-secondary-links">
               <Link to="/about">Bio</Link>
               <Link to="/contact">Contact</Link>
