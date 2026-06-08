@@ -1,25 +1,5 @@
 [
   {
-    "id": "work-010",
-    "slug": "photo-12",
-    "title": "照片 12",
-    "year": "2026",
-    "duration": "",
-    "format": "Digital image",
-    "medium": "Photography",
-    "poster": "12.jpg",
-    "image": "12.jpg",
-    "stills": [],
-    "vimeoEmbedUrl": "",
-    "synopsis": "新上传的照片作品。",
-    "description": "新上传的照片作品。",
-    "credits": [],
-    "screeningHistory": [],
-    "category": "photography",
-    "featured": true,
-    "featuredOrder": 1
-  },
-  {
     "id": "work-011",
     "slug": "photo-11",
     "title": "照片 11",
