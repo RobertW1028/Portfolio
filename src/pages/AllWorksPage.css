@@ -5,7 +5,7 @@
 
 .all-works-hero {
   background-color: #f8f7f3;
-  padding: 4rem 0 3rem;
+  padding: 3rem 0 2.75rem;
   text-align: center;
 }
 
@@ -64,7 +64,7 @@
 
 @media (max-width: 768px) {
   .all-works-hero {
-    padding: 3rem 0 2rem;
+    padding: 2.5rem 0 2rem;
   }
 
   .all-works-hero h1 {

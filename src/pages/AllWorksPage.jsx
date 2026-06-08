@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import WorkCard from '../components/WorkCard'
 import { works } from '../data/works'
 import './AllWorksPage.css'
@@ -30,7 +29,6 @@ export default function AllWorksPage() {
     <main className="all-works-page">
       <section className="all-works-hero">
         <div className="container">
-          <Link className="back-link" to="/">Home</Link>
           <h1>Works</h1>
           <p>
             Selected film and video projects.

@@ -1,26 +1,17 @@
 .content-page {
   min-height: 100vh;
   background-color: #fff;
-  padding-top: 3rem;
-}
-
-.content-page .back-link {
-  display: inline-block;
-  color: #666;
-  font-size: 0.95rem;
-}
-
-.content-page .back-link:hover {
-  color: #333;
+  padding-top: 0;
 }
 
 .content-page .about,
 .content-page .contact {
-  padding-top: 2rem;
+  padding-top: 2.75rem;
 }
 
 @media (max-width: 768px) {
-  .content-page {
+  .content-page .about,
+  .content-page .contact {
     padding-top: 2rem;
   }
 }
