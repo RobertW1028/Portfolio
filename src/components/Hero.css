@@ -11,6 +11,7 @@
   max-width: 680px;
   margin: 0 auto;
   text-align: center;
+  transform: translateY(-40px);
 }
 
 .hero-kicker {
@@ -96,5 +97,9 @@
 
   .hero-description {
     font-size: 0.95rem;
+  }
+  
+  .hero-content {
+    transform: translateY(-20px);
   }
 }
