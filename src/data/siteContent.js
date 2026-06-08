@@ -1,22 +1,22 @@
-// 网站个人信息集中管理文件
-// 改网站标题、姓名、首页简介、About / Bio、邮箱和社交链接，都来这里改。
+// 这里是整个网站最主要的内容管理文件。
+// 以后想改姓名、简介、联系方式或作品列表，优先来这个文件改。
 
 export const siteContent = {
-  // 网站标题：显示在浏览器标签页，也可显示在子页面左上角。
+  // 网站标题：会显示在浏览器标签页和导航栏左上角。
   siteTitle: '',
 
-  // 姓名：显示在首页最醒目的位置。
-  name: 'Yuezheng Wang',
+  // 我的姓名：会显示在首页最醒目的位置。
+  name: 'Wayne Wang',
 
-  // 首页身份短句：显示在姓名下方。
+  // 我的身份 / 简介短句：会显示在首页姓名下方。
   tagline: '',
 
-  // 首页简介：建议保持简短，1-2 句话就好。
+  // 首页简介：适合写 1-2 句简短介绍。
   intro:
     '',
 
-  // About / Bio：关于我的介绍。
-  // paragraphs 里每一行是一段文字，需要新增段落就多加一行。
+  // About / Bio：关于我的详细介绍。
+  // 如果想新增段落，就在 paragraphs 数组里多加一行文字。
   about: {
     heading: '我是谁',
     paragraphs: [
@@ -29,11 +29,11 @@ export const siteContent = {
 
   // 联系方式：修改邮箱或社交媒体链接就在这里。
   contact: {
-    email: 'your.email@example.com',
+    email: 'wyz15905@gmail.com',
     socialLinks: [
       {
         label: 'Instagram',
-        url: 'https://www.instagram.com/',
+        url: 'https://www.instagram.com/wayne_yuezhengwang/',
       },
       {
         label: 'LinkedIn',
@@ -45,4 +45,92 @@ export const siteContent = {
       },
     ],
   },
+
+  // 作品列表：以后新增作品，就复制一个对象粘贴到 works 数组里。
+  // 图片建议放在 public/images 文件夹，然后 image 写成 '/images/文件名.jpg'。
+  works: [
+    {
+      id: 1,
+      title: '作品 1',
+      year: '2026',
+      medium: '综合材料',
+      description: '作品描述文字',
+      image: '/images/work1.jpg',
+      category: 'painting',
+    },
+    {
+      id: 2,
+      title: '作品 2',
+      year: '2026',
+      medium: '摄影',
+      description: '作品描述文字',
+      image: '/images/work2.jpg',
+      category: 'photography',
+    },
+    {
+      id: 3,
+      title: '作品 3',
+      year: '2025',
+      medium: '影像',
+      description: '作品描述文字',
+      image: '/images/work3.jpg',
+      category: 'video',
+    },
+    {
+      id: 4,
+      title: '作品 4',
+      year: '2025',
+      medium: '布面丙烯',
+      description: '作品描述文字',
+      image: '/images/work4.jpg',
+      category: 'painting',
+    },
+    {
+      id: 5,
+      title: '作品 5',
+      year: '2024',
+      medium: '空间装置',
+      description: '作品描述文字',
+      image: '/images/work5.jpg',
+      category: 'installation',
+    },
+    {
+      id: 6,
+      title: '作品 6',
+      year: '2024',
+      medium: '数字绘画',
+      description: '作品描述文字',
+      image: '/images/work6.jpg',
+      category: 'other',
+    },
+    {
+      id: 7,
+      title: '占位作品 7',
+      year: '2024',
+      medium: '纸本水彩',
+      description: '用于测试“显示更多”功能的占位作品。',
+      image: '/images/work7.jpg',
+      category: 'painting',
+    },
+    {
+      id: 8,
+      title: '占位作品 8',
+      year: '2023',
+      medium: '摄影',
+      description: '用于测试“显示更多”功能的占位作品。',
+      image: '/images/work8.jpg',
+      category: 'photography',
+    },
+    {
+      id: 9,
+      title: '占位作品 9',
+      year: '2023',
+      medium: '装置',
+      description: '用于测试“显示更多”功能的占位作品。',
+      image: '/images/work9.jpg',
+      category: 'installation',
+    },
+  ],
 }
+
+export const works = siteContent.works

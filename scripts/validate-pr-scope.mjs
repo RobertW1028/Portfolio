@@ -1,5 +1,14 @@
 import { execFileSync } from 'node:child_process'
 
+// Fill these in with real GitHub usernames.
+// Trusted maintainers may change site content, pages, styles, routing, and docs.
+const trustedMaintainers = [
+  'RobertW1028',
+  'yuezhengwang66',
+]
+
+const approvalLabel = 'site-change-approved'
+
 const allowedExactFiles = new Set([
   'src/data/works.json',
   'CONTENT_GUIDE.md',
@@ -11,14 +20,7 @@ const allowedDirectories = [
   'public/videos/works/',
 ]
 
-const blockedPrefixes = [
-  'src/components/',
-  'src/pages/',
-  '.github/workflows/',
-  'scripts/',
-]
-
-const blockedExactFiles = new Set([
+const highRiskExactFiles = new Set([
   'package.json',
   'package-lock.json',
   'vite.config.js',
@@ -27,6 +29,25 @@ const blockedExactFiles = new Set([
   'src/main.jsx',
   '.env',
 ])
+
+const highRiskPrefixes = [
+  'src/components/',
+  'src/pages/',
+  '.github/',
+  'scripts/',
+]
+
+const trustedWarningExactFiles = new Set([
+  'package.json',
+  'package-lock.json',
+  'netlify.toml',
+  '.env',
+])
+
+const trustedWarningPrefixes = [
+  '.github/',
+  'scripts/',
+]
 
 function getChangedFiles() {
   try {
@@ -44,25 +65,71 @@ function getChangedFiles() {
   }
 }
 
-function isAllowed(file) {
+function getPullRequestAuthor() {
+  return process.env.PR_AUTHOR || process.env.GITHUB_ACTOR || ''
+}
+
+function getPullRequestLabels() {
+  return (process.env.PR_LABELS || '')
+    .split(',')
+    .map((label) => label.trim())
+    .filter(Boolean)
+}
+
+function isAllowedForRegularContributor(file) {
   return allowedExactFiles.has(file) || allowedDirectories.some((directory) => file.startsWith(directory))
 }
 
-function isBlocked(file) {
-  return blockedExactFiles.has(file) || blockedPrefixes.some((prefix) => file.startsWith(prefix))
+function isHighRiskForRegularContributor(file) {
+  return highRiskExactFiles.has(file) || highRiskPrefixes.some((prefix) => file.startsWith(prefix))
+}
+
+function shouldWarnTrustedMaintainer(file) {
+  return trustedWarningExactFiles.has(file) || trustedWarningPrefixes.some((prefix) => file.startsWith(prefix))
 }
 
 const changedFiles = getChangedFiles()
-const blockedFiles = changedFiles.filter((file) => !isAllowed(file) || isBlocked(file))
+const prAuthor = getPullRequestAuthor()
+const prLabels = getPullRequestLabels()
+const isTrustedMaintainer = trustedMaintainers.includes(prAuthor)
+const hasApprovalLabel = prLabels.includes(approvalLabel)
+
+console.log(`PR 作者：${prAuthor || '未检测到'}`)
+console.log(`PR 标签：${prLabels.length > 0 ? prLabels.join(', ') : '无'}`)
+
+if (isTrustedMaintainer) {
+  console.log('检测到 trusted maintainer，跳过普通作品投稿的严格文件范围限制。')
+} else if (hasApprovalLabel) {
+  console.log(`检测到 ${approvalLabel} 标签，允许本次 PR 修改网站代码或配置。`)
+}
+
+if (isTrustedMaintainer || hasApprovalLabel) {
+  const warningFiles = changedFiles.filter(shouldWarnTrustedMaintainer)
+
+  if (warningFiles.length > 0) {
+    console.warn('注意：本次 PR 修改了高风险配置或自动化文件，请认真审核：')
+    warningFiles.forEach((file) => {
+      console.warn(`- ${file}`)
+    })
+    console.warn('这不会阻止检查通过，但合并前需要确认这些修改是有意的。')
+  }
+
+  console.log('Pull Request 修改范围检查通过。validate-content 和 build 仍会继续运行。')
+  process.exit(0)
+}
+
+const blockedFiles = changedFiles.filter(
+  (file) => !isAllowedForRegularContributor(file) || isHighRiskForRegularContributor(file),
+)
 
 if (blockedFiles.length > 0) {
-  console.error('普通作品投稿只能修改作品数据、图片、视频和贡献说明。')
+  console.error('普通作品投稿只能修改作品数据、图片、视频和贡献说明文档。')
   console.error('下面这些文件不允许在普通作品投稿 PR 中修改：')
   blockedFiles.forEach((file) => {
     console.error(`- ${file}`)
   })
-  console.error('如果这是站点代码维护，请由管理员单独审核，或临时不使用这条检查。')
+  console.error(`如果这是经过同意的网站代码维护，请由 owner 或 trusted maintainer 添加 ${approvalLabel} 标签，或把 PR 作者加入 trustedMaintainers。`)
   process.exit(1)
 }
 
-console.log('Pull Request 修改范围检查通过')
+console.log('普通作品投稿修改范围检查通过。')

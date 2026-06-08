@@ -1,74 +1,136 @@
 # Pull Request 审核清单
 
-审核别人提交的作品 Pull Request 时，可以按下面顺序检查。
+审核 PR 时，先判断提交者属于哪一类：
 
-## 1. 自动检查是否全部绿色
+- 普通 collaborator / 投稿者：通常只添加作品，只应修改作品数据和素材文件。
+- Trusted maintainer：可以维护网站内容、页面、样式和结构，但仍然应该通过 PR 和自动检查。
 
-先看 GitHub Pull Request 页面底部的 Checks。
+## 1. 先看 GitHub 自动检查
 
-应该通过：
-
+PR 页面底部的 Checks 应该通过：
 - `Validate content`
 - `Validate pull request scope`
 - `Build`
-- 如果修改了依赖，还会有 `Dependency Review`
 
-如果有红色失败，不要急着合并。先点进去看中文错误提示。
+如果是 push 到 `main`，通常只运行内容检查和 build，不需要运行 scope 检查。
 
-## 2. Netlify Deploy Preview 是否正常
+如果检查失败，不要合并。先点进失败项，看错误提示。
 
-打开 Netlify Deploy Preview。
+## 2. 普通投稿者 PR 应该怎么判断
 
-检查页面是否能打开，作品页是否能加载。
-
-## 3. 新增作品是否显示
-
-打开作品页：
-
-`#/works`
-
-检查新增作品是否出现。
-
-如果作品设置了 `featured: true`，也检查首页精选逻辑是否符合预期。
-
-## 4. 图片和视频是否加载正常
-
-检查：
-
-- 图片是否显示
-- 视频封面图是否显示
-- 视频是否能播放
-- 文件名大小写是否和数据一致
-
-## 5. 如果有人改了代码文件，要更加谨慎
-
-普通作品投稿通常不应该修改：
-
-- `src/components/`
-- `src/pages/`
-- `src/App.jsx`
-- `package.json`
-- `package-lock.json`
-- `.github/workflows/`
-- `scripts/`
-
-如果有人改了这些文件，先确认是不是事先获得了你的同意。
-
-## 6. 如果只是添加作品，通常只应修改这些地方
-
+普通投稿者通常只应修改：
 - `src/data/works.json`
 - `public/images/works/`
-- `public/videos/works/`
+- `public/videos/works/`，仅在确实需要小视频文件时
 - `CONTENT_GUIDE.md`
 - `CONTRIBUTOR_GUIDE.md`
 
-## 7. 合并前最后确认
+如果普通投稿者修改了下面内容，属于高风险，通常不要合并：
+- `src/components/`
+- `src/pages/`
+- `src/App.jsx`
+- `src/main.jsx`
+- `package.json`
+- `package-lock.json`
+- `vite.config.js`
+- `netlify.toml`
+- `.github/`
+- `scripts/`
+- `.env` 或任何密钥文件
 
-- PR 模板是否填写清楚
-- GitHub 自动检查是否全部通过
-- Netlify Deploy Preview 是否正常
-- 新作品是否在正确页面显示
-- 没有上传过大的文件
-- 没有写 `C:\Users\...` 这种本地路径
+如果确实需要普通投稿者改网站代码，请由 owner 或 trusted maintainer 添加 `site-change-approved` 标签，并认真审核改动。
 
-确认无误后，再合并 Pull Request。
+## 3. Trusted maintainer PR 应该怎么判断
+
+Trusted maintainer 可以修改：
+- 作品数据
+- 图片和必要的小视频
+- 个人信息内容
+- 页面
+- 组件
+- CSS
+- 路由
+- 文档
+
+但仍然要确认：
+- `npm run validate-content` 通过
+- `npm run build` 通过
+- Netlify Deploy Preview 能打开
+- 首页仍然是极简入口
+- Works 页面正常显示作品卡片
+- 单个作品详情页可以根据 slug 打开
+- Bio 和 Contact 页面正常
+- 图片路径和 Vimeo URL 没有被写错
+
+如果 trusted maintainer 修改了下面文件，要特别认真看 diff：
+- `package.json`
+- `package-lock.json`
+- `netlify.toml`
+- `.github/`
+- `scripts/`
+- `.env`
+
+这些修改可能影响依赖、安全、部署或自动检查。
+
+## 4. site-change-approved 标签
+
+`site-change-approved` 表示 owner 或 trusted maintainer 已经允许这个 PR 修改网站代码或配置。
+
+这个标签只能由 owner 或 trusted maintainer 添加。
+
+有这个标签不代表可以直接合并。它只代表文件范围检查放宽，内容检查和 build 仍然必须通过。
+
+## 5. 作品数据检查
+
+检查 `src/data/works.json`：
+- `id` 是否唯一
+- `slug` 是否唯一
+- `title` 是否存在
+- `year` 是否存在
+- `duration` 是否合理
+- `format` 是否存在
+- `poster` 是否存在
+- `image` 是否和 `poster` 兼容
+- `stills` 是否是数组
+- `vimeoEmbedUrl` 是否是 `https://player.vimeo.com/video/...`
+- `synopsis` 是否存在
+- `credits` 是否是数组
+- `featured` 是否为 true 或 false
+- `featuredOrder` 是否为数字或 null
+
+## 6. 图片和 Vimeo 检查
+
+检查：
+- poster 和 stills 是否在 `public/images/works/`
+- 数据里是否只写文件名
+- 没有写 `public/images/works/xxx.jpg`
+- 没有写 `C:\Users\...`
+- 文件名大小写完全一致
+- 文件名尽量英文、小写、无空格
+- 没有把整段 iframe 写进 `works.json`
+- 没有把普通 Vimeo 页面链接写成 embed URL
+- 没有把大 mp4 视频上传到 GitHub
+
+Vimeo iframe 应该只在作品详情页加载，不应该在首页或 Works 列表页加载大量 iframe。
+
+## 7. Netlify Deploy Preview
+
+打开 Netlify Deploy Preview，检查：
+- 首页是否仍然极简
+- `/works` 是否显示作品列表
+- `/works/:slug` 是否能打开作品详情页
+- `/about` 是否正常
+- `/contact` 是否正常
+- 图片、poster、stills 是否显示
+- Vimeo 视频是否能播放
+- 手机端排版是否没有明显破坏
+
+## 8. 合并前结论
+
+最后给出明确结论：
+
+- 可以合并
+或
+- 暂时不要合并
+
+如果暂时不要合并，请把需要修改的地方写成可以直接复制给对方的反馈。

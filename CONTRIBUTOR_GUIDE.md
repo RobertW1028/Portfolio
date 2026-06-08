@@ -1,337 +1,182 @@
-# 贡献作品说明
+# 贡献说明
 
-这份说明写给完全不会代码的人。你可以通过 GitHub 给这个艺术作品集网站提交照片或视频作品。
+这份说明写给要通过 GitHub 帮忙更新网站的人。
 
-## 1. 网站更新方式
+网站更新方式是：
 
-这个网站的更新方式是：
+本地或 GitHub 修改内容 -> 创建 Pull Request -> GitHub 自动检查 -> Netlify Deploy Preview -> 审核后合并 -> Netlify 自动更新正式网站。
 
-GitHub 修改内容 → 创建 Pull Request → 自动检查 → 我审核合并 → Netlify 自动部署。
+请不要直接去 Netlify 上传作品。Netlify 会从 GitHub 仓库自动部署。
 
-请不要直接去 Netlify 上传作品。
+## 两类协作者
 
-Netlify 会自动从 GitHub 读取最新代码并发布网站。
+### A. 普通 collaborator / 投稿者
 
-## 2. 不要直接修改 main 分支
+普通投稿者通常只添加或修改作品内容，不修改网站代码。
 
-请不要直接修改 `main` 分支。
+普通投稿者可以修改：
+- `src/data/works.json`
+- `public/images/works/`
+- `public/videos/works/`，仅在确实需要小视频文件时
+- `CONTENT_GUIDE.md`
+- `CONTRIBUTOR_GUIDE.md`
 
-正确做法是：
-
-1. 创建一个新分支。
-2. 在新分支里上传图片、视频和修改作品数据。
-3. 创建 Pull Request。
-4. 等 GitHub 自动检查完成。
-5. 按错误提示修复问题。
-6. 等我审核。
-7. 我确认没有问题后再合并。
-
-合并后 Netlify 会自动更新正式网站。
-
-## 3. Pull Request 会自动检查什么
-
-Pull Request 会自动运行：
-
-```bash
-npm run validate-content
-npm run validate-pr-scope
-npm run build
-```
-
-自动检查会发现常见错误，例如：
-
-- 图片文件不存在
-- 视频文件不存在
-- 文件名写错
-- 写了 `C:\Users\...` 这种本地路径
-- `mediaType` 写错
-- `featured` 写成字符串
-- `id` 重复
-- 修改了不该修改的网站代码文件
-
-如果检查失败，请点开 GitHub 里的失败项目，根据中文错误提示修改。
-
-## 4. 不要修改网站代码
-
-普通作品投稿不要修改网站代码，除非事先获得我同意。
-
-不要修改：
-
+普通投稿者不要修改：
 - `src/components/`
 - `src/pages/`
 - `src/App.jsx`
+- `src/main.jsx`
 - `package.json`
 - `package-lock.json`
-- `.github/workflows/`
+- `vite.config.js`
+- `netlify.toml`
+- `.github/`
 - `scripts/`
+- `.env` 或任何密钥文件
 
-普通作品投稿通常只需要修改：
+如果普通投稿者修改了这些网站代码或配置文件，GitHub Actions 会失败。
 
-- `src/data/works.json`
-- `public/images/works/`
-- `public/videos/works/`
+### B. Trusted maintainer
 
-## 5. 图片放在哪里
+Trusted maintainer 是被信任的网站维护者，可以修改：
+- 作品数据
+- 图片和少量必要视频
+- `src/data/siteContent.js`
+- 组件
+- 页面
+- CSS 样式
+- 路由
+- 文档
 
-所有作品图片放在：
+Trusted maintainer 仍然应该通过 Pull Request 提交修改，不建议直接 push 到 `main`。
 
-`public/images/works/`
+Trusted maintainer 的 PR 仍然必须通过：
+- `npm run validate-content`
+- `npm run build`
 
-视频封面图也放在：
+如果 trusted maintainer 修改了下面这些高风险文件，检查不会直接失败，但会显示 warning，审核时需要特别小心：
+- `package.json`
+- `package-lock.json`
+- `netlify.toml`
+- `.github/`
+- `scripts/`
+- `.env`
 
-`public/images/works/`
+## trusted maintainer 名单在哪里设置
 
-例如：
+请在 `scripts/validate-pr-scope.mjs` 顶部找到：
 
-`public/images/works/my-photo-01.jpg`
+```js
+const trustedMaintainers = [
+  'YOUR_GITHUB_USERNAME',
+  'FRIEND_GITHUB_USERNAME',
+]
+```
 
-## 6. 视频放在哪里
+把占位符改成真实 GitHub 用户名，例如：
 
-所有视频文件放在：
+```js
+const trustedMaintainers = [
+  'your-name',
+  'friend-name',
+]
+```
 
-`public/videos/works/`
+用户名必须和 GitHub 账号登录名完全一致。
 
-例如：
+## site-change-approved 标签
 
-`public/videos/works/performance-001.mp4`
+如果某个 PR 不是 trusted maintainer 提交的，但这次确实需要修改网站代码，可以由 owner 或 trusted maintainer 给 PR 添加标签：
 
-## 7. 作品数据在哪里
+`site-change-approved`
+
+有这个标签后，文件范围检查会放宽，允许修改页面、组件、样式和配置。
+
+普通 collaborator 不应该自己随便加这个标签。这个标签只由 owner 或 trusted maintainer 添加。
+
+即使有这个标签，PR 仍然必须通过内容检查和 build。
+
+## 添加作品时的基本规则
 
 作品数据在：
 
 `src/data/works.json`
 
-网站不会自动扫描图片文件夹。上传图片后，还必须在 `works.json` 里添加作品信息。
+作品图片、poster 和 stills 放在：
 
-## 8. 文件名规则
+`public/images/works/`
+
+小视频文件如果确实需要放在仓库，放在：
+
+`public/videos/works/`
+
+但这个网站主要推荐使用 Vimeo 嵌入，不建议把大 `.mp4` 视频直接上传到 GitHub。
+
+## 文件名规则
 
 文件名建议使用英文、小写、数字、短横线或下划线。
 
 推荐：
+- `my-film-poster.jpg`
+- `my-film-still-01.webp`
 
-`my-photo-01.jpg`
+不要使用：
+- 中文文件名
+- 空格
+- 特殊符号
+- 电脑本地路径，例如 `C:\Users\...`
 
-`performance_001.mp4`
-
-不推荐：
-
-`我的 照片 01.JPG`
-
-`Final Video 最终版.mp4`
-
-不要使用空格、中文或特殊符号。
-
-不要上传过大的图片或视频。建议图片小于 5MB，视频小于 25MB。
-
-## 9. 不要写电脑本地路径
-
-`image` 和 `video` 字段只写文件名。
+数据里的 `poster`、`image`、`stills`、`video` 只写文件名，不要写文件夹路径。
 
 正确：
 
 ```json
-"image": "my-photo-01.jpg"
-```
-
-正确：
-
-```json
-"video": "performance-001.mp4"
+"poster": "my-film-poster.jpg"
 ```
 
 错误：
 
 ```json
-"image": "C:\\Users\\Name\\Desktop\\my-photo-01.jpg"
+"poster": "public/images/works/my-film-poster.jpg"
 ```
 
-错误：
+## Vimeo 视频作品
 
-```json
-"image": "public/images/works/my-photo-01.jpg"
-```
-
-## 10. 图片作品怎么写
-
-图片作品示例：
-
-```json
-{
-  "id": "work-012",
-  "title": "作品标题",
-  "year": "2026",
-  "medium": "Photography",
-  "description": "作品简介。",
-  "image": "my-photo-01.jpg",
-  "video": "",
-  "mediaType": "image",
-  "category": "photography",
-  "featured": false,
-  "featuredOrder": null
-}
-```
-
-图片作品的 `mediaType` 写：
-
-```json
-"mediaType": "image"
-```
-
-图片作品的 `video` 写空字符串：
-
-```json
-"video": ""
-```
-
-## 11. 视频作品怎么写
-
-视频作品需要两个文件：
-
-- 视频封面图，放在 `public/images/works/`
-- 视频文件，放在 `public/videos/works/`
-
-视频作品示例：
-
-```json
-{
-  "id": "work-013",
-  "title": "视频作品标题",
-  "year": "2026",
-  "medium": "Video",
-  "description": "视频作品简介。",
-  "image": "performance-001-cover.jpg",
-  "video": "performance-001.mp4",
-  "mediaType": "video",
-  "category": "video",
-  "featured": false,
-  "featuredOrder": null
-}
-```
-
-视频作品的 `mediaType` 写：
-
-```json
-"mediaType": "video"
-```
-
-## 12. featured 和 featuredOrder
-
-```json
-"featured": true
-```
-
-表示首页精选。
-
-```json
-"featured": false
-```
-
-表示只在作品页显示。
-
-如果需要控制首页精选排序，可以写：
-
-```json
-"featuredOrder": 1
-```
-
-数字越小越靠前。
-
-如果不需要首页精选排序，写：
-
-```json
-"featuredOrder": null
-```
-
-## 13. 如何创建 Pull Request
-
-1. 修改完成后，GitHub 通常会提示 `Compare & pull request`。
-2. 点击它。
-3. 填写本次添加了哪些作品。
-4. 按 Pull Request 模板勾选检查项。
-5. 提交 Pull Request。
-6. 等自动检查完成。
-
-我会审核 Pull Request。确认文件位置、作品数据和预览效果没问题后，再合并到 `main`。
-
-## 14. Netlify 预览和正式部署
-
-创建 Pull Request 后，Netlify 通常会生成 Deploy Preview。
-
-你可以打开 Deploy Preview 检查作品是否显示正常。
-
-Pull Request 合并后，Netlify 会自动更新正式网站。
-
-## 15. 提交前自查
-
-提交前请检查：
-
-- 图片是否在 `public/images/works/`
-- 视频是否在 `public/videos/works/`
-- 视频是否有封面图
-- `works.json` 是否添加了作品信息
-- `image` 和 `video` 是否只写文件名
-- 文件名大小写是否一致
-- `mediaType` 是否写对
-- `featured` 是否写成 true 或 false
-- 没有直接修改 `main` 分支
-- 没有修改网站代码，除非事先获得同意
-
-## 16. 如何添加 Vimeo 视频作品
-
-这个网站现在主要适合提交 video / film projects。
-
-请先把完整视频上传到 Vimeo，再把 Vimeo player URL 写进作品数据。
-
-不要把大视频直接上传到 GitHub。
-
-推荐提交内容：
-
-- poster：放在 `public/images/works/`
-- film stills：放在 `public/images/works/`
-- Vimeo player URL：写在 `src/data/works.json` 的 `vimeoEmbedUrl`
-
-Vimeo player URL 应该像这样：
+Vimeo 地址请使用 player URL：
 
 ```text
 https://player.vimeo.com/video/123456789
 ```
 
-不要粘贴整段 iframe。
+不要把整段 iframe 粘进 `works.json`。
 
-如果 Vimeo 限制嵌入域名，请允许：
+不要使用普通 Vimeo 页面链接，例如：
 
-`yuezhengwang.com`
-
-`www.yuezhengwang.com`
-
-作品数据示例：
-
-```json
-{
-  "id": "work-014",
-  "slug": "new-film-project",
-  "title": "New Film Project",
-  "year": "2026",
-  "duration": "8:32",
-  "format": "Single-channel video, color, sound",
-  "medium": "Video / Film",
-  "poster": "new-film-poster.jpg",
-  "image": "new-film-poster.jpg",
-  "stills": ["new-film-still-01.jpg", "new-film-still-02.jpg"],
-  "vimeoEmbedUrl": "https://player.vimeo.com/video/123456789",
-  "synopsis": "这里写简短作品简介。",
-  "description": "这里写简短作品简介。",
-  "credits": ["Director: Name", "Sound: Name"],
-  "screeningHistory": [],
-  "category": "film",
-  "featured": false,
-  "featuredOrder": null
-}
+```text
+https://vimeo.com/123456789
 ```
 
-提交前请运行或等待 GitHub 自动运行：
+## Pull Request 流程
 
-```bash
-npm run validate-content
-npm run build
-```
+1. 不要直接修改 `main`。
+2. 新建 branch。
+3. 上传 poster、stills 或必要的小视频文件。
+4. 修改 `src/data/works.json`。
+5. 创建 Pull Request。
+6. 等 GitHub Actions 自动检查。
+7. 打开 Netlify Deploy Preview 检查页面。
+8. 根据错误提示修改。
+9. 等 owner 或 trusted maintainer 审核。
+10. 合并后 Netlify 会自动更新正式网站。
+
+## 检查失败怎么办
+
+如果 GitHub Actions 失败，请点开失败项，看中文错误提示。
+
+常见原因：
+- 图片文件没有上传
+- `poster` 文件名和真实文件名大小写不一致
+- `vimeoEmbedUrl` 不是 Vimeo player URL
+- JSON 少了逗号或引号
+- 普通投稿者修改了网站代码文件
+- 上传了不应该放进仓库的大视频
