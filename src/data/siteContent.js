@@ -3,7 +3,7 @@
 
 export const siteContent = {
   // 网站标题：显示在浏览器标签页，也可显示在子页面左上角。
-  siteTitle: 'Yuezheng Wang',
+  siteTitle: '',
 
   // 姓名：显示在首页最醒目的位置。
   name: 'Yuezheng Wang',
