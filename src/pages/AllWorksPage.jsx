@@ -5,7 +5,7 @@ import { works } from '../data/works'
 import './AllWorksPage.css'
 
 const categoryLabels = {
-  all: '全部',
+  all: 'All',
   film: 'Film',
   photography: 'Photography',
   installation: 'Installation',
@@ -30,17 +30,17 @@ export default function AllWorksPage() {
     <main className="all-works-page">
       <section className="all-works-hero">
         <div className="container">
-          <Link className="back-link" to="/">返回首页</Link>
-          <h1>作品</h1>
+          <Link className="back-link" to="/">Home</Link>
+          <h1>Works</h1>
           <p>
-            这里收录 video / film projects、摄影、装置和其他作品。点击作品进入详情页。
+            Selected film and video projects.
           </p>
         </div>
       </section>
 
       <section className="works all-works-section">
         <div className="container">
-          <div className="category-filters" aria-label="作品分类筛选">
+          <div className="category-filters" aria-label="Work category filters">
             {categories.map((category) => (
               <button
                 key={category}
