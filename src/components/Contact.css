@@ -1,113 +1,44 @@
-/* Contact 区域样式 */
-.contact {
-  background-color: #fff;
-  padding: 4rem 0;
-}
-
 .contact-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.contact-content-simple {
-  align-items: start;
+  text-align: center;
 }
 
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  align-items: center;
+  gap: 28px;
 }
 
 .info-item h2 {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: #777;
+  line-height: 1.5;
 }
 
 .info-item p {
+  margin: 0;
   font-size: 0.95rem;
-  color: #666;
-  line-height: 1.8;
+  color: #333;
+  line-height: 1.75;
 }
 
 .info-item a {
   color: #333;
-  font-weight: 500;
+  font-weight: 400;
 }
 
-.social-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 1rem;
+.info-item a:hover {
+  color: #777;
 }
 
-.contact-note {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.8;
-  margin: 0;
-}
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group input,
-.form-group textarea {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  font-family: inherit;
-  color: #333;
-  transition: border-color 0.3s ease;
-}
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: #999;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #333;
-}
-
-.submit-btn {
-  padding: 0.75rem 1.5rem;
-  background-color: #333;
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 500;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-  align-self: flex-start;
-}
-
-.submit-btn:hover {
-  background-color: #555;
-}
-
-/* 手机响应式 */
-@media (max-width: 768px) {
-  .contact-content {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+@media (max-width: 700px) {
+  .contact-info {
+    gap: 24px;
   }
 
-  .submit-btn {
-    align-self: stretch;
+  .info-item p {
+    font-size: 0.9rem;
   }
 }

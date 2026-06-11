@@ -1,17 +1,28 @@
-.content-page {
-  min-height: 100vh;
+.page-shell {
+  min-height: calc(100vh - 96px);
   background-color: #fff;
-  padding-top: 0;
+  padding: 10vh 6vw 12vh;
 }
 
-.content-page .about,
-.content-page .contact {
-  padding-top: 2.75rem;
+.page-title {
+  margin: 0 0 56px;
+  text-align: center;
+  font-size: clamp(18px, 1.5vw, 24px);
+  font-weight: 400;
+  line-height: 1.2;
 }
 
-@media (max-width: 768px) {
-  .content-page .about,
-  .content-page .contact {
-    padding-top: 2rem;
+.page-content {
+  width: min(900px, 100%);
+  margin: 0 auto;
+}
+
+@media (max-width: 700px) {
+  .page-shell {
+    padding: 9vh 6vw 12vh;
+  }
+
+  .page-title {
+    margin-bottom: 40px;
   }
 }

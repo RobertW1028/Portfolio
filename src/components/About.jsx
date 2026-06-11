@@ -3,20 +3,29 @@ import './About.css'
 
 export default function About() {
   const { about } = siteContent
+  const paragraphs = about.paragraphs.filter((paragraph) => paragraph.trim())
+  const portraitSrc = about.portraitImage
+    ? about.portraitImage.startsWith('/')
+      ? about.portraitImage
+      : `/images/bio/${about.portraitImage}`
+    : ''
 
   return (
-    <section className="about">
-      <div className="container">
-        <h1 className="section-title">Bio</h1>
-        <div className="about-content">
-          <div className="about-text">
-            <h2>{about.heading}</h2>
-            {about.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
-        </div>
+    <>
+      <div className="bio-portrait-wrap" aria-label="Portrait">
+        {portraitSrc ? (
+          <img className="bio-portrait" src={portraitSrc} alt={about.heading || siteContent.name} />
+        ) : (
+          // TEMP: bio portrait placeholder, replace with real portrait later.
+          <div className="bio-portrait bio-portrait-placeholder" aria-hidden="true" />
+        )}
       </div>
-    </section>
+      <div className="bio-copy">
+        {about.heading && <h2>{about.heading}</h2>}
+        {paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+      </div>
+    </>
   )
 }

@@ -6,11 +6,13 @@ import './Works.css'
 export default function WorkCard({ work }) {
   const [imageFailed, setImageFailed] = useState(false)
   const posterSrc = getWorkPosterSrc(work)
-  const meta = [work.year, work.duration || work.format].filter(Boolean).join(' · ')
+  const hasDetailPage = Boolean(work.slug)
+  const CardElement = hasDetailPage ? Link : 'div'
+  const cardProps = hasDetailPage ? { to: `/works/${work.slug}` } : {}
 
   return (
     <article className="work-item">
-      <Link className="work-card-link" to={`/works/${work.slug}`}>
+      <CardElement className="work-card-link" {...cardProps}>
         <div className="work-image">
           {!imageFailed && posterSrc ? (
             <img
@@ -19,17 +21,14 @@ export default function WorkCard({ work }) {
               onError={() => setImageFailed(true)}
             />
           ) : (
-            <div className="work-image-placeholder">
-              <span>{work.title}</span>
-            </div>
+            <div className="work-image-placeholder" aria-hidden="true" />
           )}
         </div>
         <div className="work-info">
           <h3>{work.title}</h3>
-          <p className="work-meta">{meta}</p>
-          {work.format && <p>{work.format}</p>}
+          <p>{work.year}</p>
         </div>
-      </Link>
+      </CardElement>
     </article>
   )
 }

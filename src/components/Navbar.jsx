@@ -8,7 +8,7 @@ export default function Navbar() {
       <div className="container">
         <div className="navbar-content">
           <Link className="navbar-logo" to="/">
-            {siteContent.siteTitle}
+            {siteContent.name}
           </Link>
           <ul className="nav-links">
             <li><NavLink to="/works">Works</NavLink></li>

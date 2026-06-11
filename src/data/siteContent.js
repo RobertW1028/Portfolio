@@ -3,7 +3,7 @@
 
 export const siteContent = {
   // 网站标题：会显示在浏览器标签页和导航栏左上角。
-  siteTitle: 'Wayne',
+  siteTitle: 'Yuezheng Wang',
 
   // 我的姓名：会显示在首页最醒目的位置。
   name: 'Yuezheng Wang',
@@ -15,10 +15,21 @@ export const siteContent = {
   intro:
     '',
 
+  // 首页封面作品：当 src/data/works.json 里暂时没有作品时，首页会使用这里。
+  // image 只写 public/images/works/ 里的文件名，不要写电脑本地路径。
+  homeFeature: {
+    title: 'Days After Mekong Hotel',
+    year: '2026',
+    image: '13.jpg',
+  },
+
   // About / Bio：关于我的详细介绍。
   // 如果想新增段落，就在 paragraphs 数组里多加一行文字。
   about: {
     heading: 'Yuezheng Wang',
+    // Bio 页面人物照片。真实照片可放在 public/images/bio/，这里写文件名即可，例如 'portrait.jpg'。
+    // 暂时留空时，Bio 页面会显示一个极简浅灰占位区域。
+    portraitImage: '',
     paragraphs: [
       '',
       '',

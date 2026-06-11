@@ -1,61 +1,70 @@
-/* About 区域样式 */
-.about {
-  background-color: #f8f7f3;
-  padding: 4rem 0;
-}
-
-.about-content {
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.about-text h2 {
-  font-size: 1.3rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  font-weight: 600;
-}
-
-.about-text h2:first-child {
-  margin-top: 0;
-}
-
-.about-text p {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-}
-
-.skills-list {
-  list-style: none;
+.bio-content {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-top: 1rem;
+  grid-template-columns: minmax(180px, 0.9fr) minmax(280px, 1.1fr);
+  gap: 64px;
+  align-items: start;
 }
 
-.skills-list li {
-  padding: 0.8rem;
-  background-color: #fff;
-  border-radius: 4px;
+.bio-portrait-wrap {
+  width: min(260px, 100%);
+  justify-self: end;
+}
+
+.bio-portrait {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.bio-portrait-placeholder {
+  background-color: #f3f3f1;
+}
+
+.bio-copy {
+  max-width: 420px;
+  justify-self: start;
+  margin-left: 24px;
+}
+
+.bio-copy h2 {
+  margin: 0 0 1.4rem;
   font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.6;
   color: #333;
-  border-left: 3px solid #333;
-  padding-left: 1rem;
 }
 
-/* 手机响应式 */
-@media (max-width: 768px) {
-  .about-text h2 {
-    font-size: 1.1rem;
-  }
+.bio-copy p {
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.85;
+}
 
-  .about-text p {
-    font-size: 0.95rem;
-  }
-
-  .skills-list {
+@media (max-width: 700px) {
+  .bio-content {
+    width: min(88vw, 480px);
     grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .bio-portrait-wrap,
+  .bio-copy {
+    justify-self: center;
+  }
+
+  .bio-portrait-wrap {
+    max-width: 320px;
+  }
+
+  .bio-copy {
+    max-width: none;
+    text-align: left;
+    margin-left: 0;
+  }
+
+  .bio-copy p {
+    font-size: 0.9rem;
   }
 }

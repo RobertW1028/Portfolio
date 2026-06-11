@@ -1,79 +1,106 @@
 .work-detail-page {
-  min-height: 100vh;
+  min-height: calc(100vh - 96px);
   background-color: #fff;
-  padding: 3rem 0 5rem;
+  padding: 10vh 6vw 12vh;
 }
 
-.work-detail-container {
-  max-width: 980px;
+.work-detail-inner {
+  width: min(820px, 100%);
+  margin: 0 auto;
 }
 
 .work-detail-header {
-  margin: 2.4rem 0 2.2rem;
+  text-align: center;
 }
 
 .work-detail-header h1 {
-  font-size: 2.4rem;
-  font-weight: 600;
-  line-height: 1.18;
-  margin-bottom: 0.9rem;
+  margin: 0 0 0.8rem;
+  font-size: clamp(20px, 1.9vw, 28px);
+  font-weight: 400;
+  line-height: 1.25;
 }
 
-.work-detail-meta,
-.work-detail-medium {
+.work-detail-header p {
+  margin: 0;
   color: #666;
+  font-size: 0.9rem;
   line-height: 1.7;
 }
 
 .work-detail-section {
-  max-width: 760px;
-  margin-top: 2.6rem;
+  width: min(640px, 100%);
+  margin: 72px auto 0;
 }
 
 .work-detail-section h2 {
-  font-size: 1rem;
-  margin-bottom: 0.9rem;
-  font-weight: 600;
+  margin: 0 0 1.2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.4;
 }
 
 .work-detail-section p,
 .work-detail-section li {
-  color: #666;
-  line-height: 1.8;
+  margin: 0 0 1.1rem;
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.85;
 }
 
 .work-detail-section ul {
+  margin: 0;
+  padding: 0;
   list-style: none;
 }
 
-.stills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.2rem;
+.work-stills {
+  width: 100%;
+  max-width: none;
 }
 
-.stills-grid img {
+.work-stills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.work-stills-grid img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  display: block;
   object-fit: cover;
-  background-color: #eee;
 }
 
 .work-not-found {
-  padding: 5rem 0;
   text-align: center;
 }
 
 .work-not-found h1 {
-  margin-bottom: 1rem;
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  font-weight: 400;
 }
 
-@media (max-width: 768px) {
+.work-not-found a {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.work-not-found a:hover {
+  color: #333;
+}
+
+@media (max-width: 700px) {
   .work-detail-page {
-    padding-top: 2rem;
+    padding: 9vh 6vw 12vh;
   }
 
-  .work-detail-header h1 {
-    font-size: 1.9rem;
+  .work-detail-section {
+    margin-top: 56px;
+  }
+
+  .work-stills-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 }

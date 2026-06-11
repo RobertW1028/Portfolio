@@ -15,7 +15,8 @@ export function getWorkImageSrc(image) {
 }
 
 export function getWorkPosterSrc(work) {
-  return getWorkImageSrc(work.poster || work.image)
+  const still = Array.isArray(work.stills) ? work.stills[0] : ''
+  return getWorkImageSrc(work.poster || work.image || still)
 }
 
 export function getWorkVideoSrc(video) {
