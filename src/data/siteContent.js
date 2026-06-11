@@ -20,7 +20,8 @@ export const siteContent = {
   homeFeature: {
     title: 'Days After Mekong Hotel',
     year: '2026',
-    image: '13.jpg',
+    image: '/images/home/home-still.jpg',
+    alt: 'Film still',
   },
 
   // About / Bio：关于我的详细介绍。
@@ -29,7 +30,7 @@ export const siteContent = {
     heading: 'Yuezheng Wang',
     // Bio 页面人物照片。真实照片可放在 public/images/bio/，这里写文件名即可，例如 'portrait.jpg'。
     // 暂时留空时，Bio 页面会显示一个极简浅灰占位区域。
-    portraitImage: '',
+    portraitImage: '/images/profile/portrait.jpg',
     paragraphs: [
       '',
       '',
@@ -39,6 +40,8 @@ export const siteContent = {
   // 联系方式：修改邮箱或社交媒体链接就在这里。
   contact: {
     email: 'wyz15905@gmail.com',
+    contactMessage:
+      'For collaborations, screenings, project inquiries, or other questions, please contact me via email or social media.',
     socialLinks: [
       {
         label: 'Instagram',

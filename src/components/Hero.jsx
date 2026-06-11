@@ -40,7 +40,7 @@ export default function Hero() {
         <img
           className="home-feature-image"
           src={imageSrc}
-          alt={featureWork.title || 'Featured work'}
+          alt={featureWork.alt || featureWork.title || 'Featured work'}
         />
       )}
       <div className="home-feature-meta">

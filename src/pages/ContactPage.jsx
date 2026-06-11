@@ -5,7 +5,7 @@ export default function ContactPage() {
   return (
     <main className="page-shell contact-page">
       <h1 className="page-title">Contact</h1>
-      <section className="page-content contact-content">
+      <section className="page-content contact-content contact-content--split">
         <Contact />
       </section>
     </main>

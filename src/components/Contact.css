@@ -1,15 +1,41 @@
 .contact-content {
-  text-align: center;
+  text-align: left;
 }
 
-.contact-info {
+.contact-content--split {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.85fr) minmax(280px, 1.15fr);
+  gap: 64px;
+  align-items: start;
+}
+
+.contact-left {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 28px;
+  gap: 24px;
+  justify-self: end;
+  width: 100%;
+  max-width: 220px;
 }
 
-.info-item h2 {
+.contact-right {
+  justify-self: start;
+  max-width: 460px;
+}
+
+.contact-right > p {
+  margin: 0;
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  font-weight: 400;
+}
+
+.contact-row {
+  margin: 0;
+}
+
+.contact-label {
   margin: 0 0 0.45rem;
   font-size: 0.82rem;
   font-weight: 400;
@@ -17,28 +43,48 @@
   line-height: 1.5;
 }
 
-.info-item p {
-  margin: 0;
-  font-size: 0.95rem;
+.contact-instagram {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.contact-row a,
+.contact-right a,
+.contact-left a {
   color: #333;
+  font-size: 0.95rem;
+  font-weight: 400;
   line-height: 1.75;
 }
 
-.info-item a {
-  color: #333;
-  font-weight: 400;
-}
-
-.info-item a:hover {
+.contact-row a:hover,
+.contact-right a:hover,
+.contact-left a:hover {
   color: #777;
 }
 
 @media (max-width: 700px) {
-  .contact-info {
-    gap: 24px;
+  .contact-content {
+    text-align: left;
   }
 
-  .info-item p {
+  .contact-content--split {
+    width: min(88vw, 480px);
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .contact-left,
+  .contact-right {
+    justify-self: center;
+    width: min(100%, 420px);
+  }
+
+  .contact-right > p,
+  .contact-row a,
+  .contact-right a,
+  .contact-left a {
     font-size: 0.9rem;
   }
 }
