@@ -13,10 +13,26 @@
   padding: 1.1rem 0;
 }
 
-.navbar-logo {
+.navbar-logo,
+.navbar-logo:visited,
+.navbar-logo:hover,
+.navbar-logo:active,
+.navbar-logo:focus,
+.navbar-logo[aria-current="page"] {
   font-size: 0.95rem;
   font-weight: 500;
   color: #333;
+}
+
+.navbar-logo,
+.nav-links a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navbar-logo:focus-visible,
+.nav-links a:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 4px;
 }
 
 .nav-links {
