@@ -72,15 +72,15 @@ export default function WorkDetail() {
     <main className="work-detail-page">
       <article className="work-detail-inner">
         <header className="work-detail-header">
-          <h1>{work.title}</h1>
-          {metadata && <p>{metadata}</p>}
+          <h1 className="work-detail-title">{work.title}</h1>
+          {metadata && <p className="work-detail-meta">{metadata}</p>}
         </header>
 
         <VimeoEmbed work={work} />
 
         {synopsisParagraphs.length > 0 && (
           <section className="work-detail-section work-synopsis">
-            <h2>Synopsis</h2>
+            <h2 className="work-section-title">Synopsis</h2>
             {synopsisParagraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
@@ -89,7 +89,7 @@ export default function WorkDetail() {
 
         {credits.length > 0 && (
           <section className="work-detail-section">
-            <h2>Credits</h2>
+            <h2 className="work-section-title">Credits</h2>
             <ul>
               {credits.map((credit) => (
                 <li key={credit}>{credit}</li>
@@ -100,7 +100,7 @@ export default function WorkDetail() {
 
         {stills.length > 0 && (
           <section className="work-detail-section work-stills">
-            <h2>Film stills</h2>
+            <h2 className="work-section-title">Film stills</h2>
             <div className="work-stills-grid">
               {stills.map((still) => (
                 <img key={still} src={getWorkImageSrc(still)} alt={`${work.title} still`} />
