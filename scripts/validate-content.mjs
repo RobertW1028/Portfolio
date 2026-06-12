@@ -19,7 +19,6 @@ const requiredFields = [
   'poster',
   'image',
   'stills',
-  'vimeoEmbedUrl',
   'synopsis',
   'description',
   'credits',
@@ -28,11 +27,37 @@ const requiredFields = [
   'featured',
   'featuredOrder',
 ]
+
+const stringFields = [
+  'id',
+  'slug',
+  'title',
+  'year',
+  'duration',
+  'format',
+  'medium',
+  'poster',
+  'image',
+  'youtubeEmbedUrl',
+  'youtubeWatchUrl',
+  'vimeoEmbedUrl',
+  'bilibiliEmbedUrl',
+  'bilibiliWatchUrl',
+  'synopsis',
+  'description',
+  'category',
+]
+
 const allowedCategories = ['video', 'film', 'installation', 'photography', 'other']
 const allowedImageExtensions = ['.jpg', '.jpeg', '.png', '.webp']
 const imageWarningSize = 5 * 1024 * 1024
 const safeFileNamePattern = /^[a-z0-9._-]+$/
 const slugPattern = /^[a-z0-9-]+$/
+const youtubeEmbedPrefixes = [
+  'https://www.youtube.com/embed/',
+  'https://youtube.com/embed/',
+  'https://www.youtube-nocookie.com/embed/',
+]
 
 const errors = []
 const warnings = []
@@ -53,9 +78,21 @@ function hasPathPrefix(value) {
   return value.startsWith('/') || value.includes('/')
 }
 
-function checkFileNameOnly(work, fieldName, value) {
-  const label = work.id || '未知作品'
+function hasIframe(value) {
+  return typeof value === 'string' && value.toLowerCase().includes('<iframe')
+}
 
+function getLabel(work, index) {
+  return work.id || `第 ${index + 1} 个作品`
+}
+
+function checkStringField(work, field, label) {
+  if (field in work && typeof work[field] !== 'string') {
+    addError(`${label}：${field} 必须是字符串。`)
+  }
+}
+
+function checkFileNameOnly(work, fieldName, value, label) {
   if (typeof value !== 'string' || !value.trim()) {
     addError(`${label}：${fieldName} 不能为空。`)
     return false
@@ -70,7 +107,7 @@ function checkFileNameOnly(work, fieldName, value) {
   }
 
   if (!safeFileNamePattern.test(value)) {
-    addError(`${label}：${fieldName} 文件名只能使用英文小写、数字、短横线、下划线和点号，不能有空格、中文或特殊符号。当前值：${value}`)
+    addError(`${label}：${fieldName} 文件名只建议使用英文小写、数字、短横线、下划线和点号。当前值：${value}`)
   }
 
   const extension = path.extname(value).toLowerCase()
@@ -81,23 +118,53 @@ function checkFileNameOnly(work, fieldName, value) {
   return true
 }
 
-function checkImageFile(work, fieldName, fileName) {
+function checkImageFile(fieldName, fileName, label) {
   const filePath = path.join(imageDir, fileName)
 
   if (!existsSync(filePath)) {
-    addError(`${work.id}：找不到 ${fieldName}：public/images/works/${fileName}`)
+    addError(`${label}：找不到 ${fieldName}：public/images/works/${fileName}`)
     return
   }
 
   const fileSize = statSync(filePath).size
   if (fileSize > imageWarningSize) {
-    addWarning(`${work.id}：${fieldName} 文件较大：${fileName}，可能影响网页加载速度。`)
+    addWarning(`${label}：${fieldName} 文件较大：${fileName}，可能影响网页加载速度。`)
   }
 }
 
-function checkStringField(work, field) {
-  if (typeof work[field] !== 'string') {
-    addError(`${work.id || '未知作品'}：${field} 必须是字符串。`)
+function checkEmbedUrl(work, field, label, isValid, message) {
+  const value = work[field]
+
+  if (!value) {
+    return
+  }
+
+  if (isLocalComputerPath(value)) {
+    addError(`${label}：${field} 不要写电脑本地路径。`)
+  }
+
+  if (hasIframe(value)) {
+    addError(`${label}：${field} 不要粘贴整段 iframe，只写播放器地址。`)
+  }
+
+  if (!isValid(value)) {
+    addError(`${label}：${message}`)
+  }
+}
+
+function checkWatchUrl(work, field, label) {
+  const value = work[field]
+
+  if (!value) {
+    return
+  }
+
+  if (isLocalComputerPath(value)) {
+    addError(`${label}：${field} 不要写电脑本地路径。`)
+  }
+
+  if (hasIframe(value)) {
+    addError(`${label}：${field} 不要粘贴整段 iframe，只写链接地址。`)
   }
 }
 
@@ -121,7 +188,7 @@ async function main() {
   const slugs = new Set()
 
   works.forEach((work, index) => {
-    const label = work.id || `第 ${index + 1} 个作品`
+    const label = getLabel(work, index)
 
     requiredFields.forEach((field) => {
       if (!(field in work)) {
@@ -129,15 +196,11 @@ async function main() {
       }
     })
 
-    ;['id', 'slug', 'title', 'year', 'duration', 'format', 'medium', 'poster', 'image', 'vimeoEmbedUrl', 'synopsis', 'description', 'category'].forEach((field) => {
-      if (field in work) {
-        checkStringField(work, field)
-      }
-    })
+    stringFields.forEach((field) => checkStringField(work, field, label))
 
     if (work.id) {
       if (ids.has(work.id)) {
-        addError(`${work.id}：id 重复。`)
+        addError(`${label}：id 重复。`)
       }
       ids.add(work.id)
     }
@@ -176,11 +239,13 @@ async function main() {
       addError(`${label}：screeningHistory 必须是数组。`)
     }
 
-    if (work.poster && checkFileNameOnly(work, 'poster', work.poster)) {
-      checkImageFile(work, 'poster', work.poster)
+    if (work.poster && checkFileNameOnly(work, 'poster', work.poster, label)) {
+      checkImageFile('poster', work.poster, label)
     }
 
-    if (work.image && checkFileNameOnly(work, 'image', work.image)) {
+    if (work.image && checkFileNameOnly(work, 'image', work.image, label)) {
+      checkImageFile('image', work.image, label)
+
       if (work.poster && work.image !== work.poster) {
         addWarning(`${label}：image 与 poster 不一致。旧组件兼容字段通常建议等于 poster。`)
       }
@@ -188,20 +253,38 @@ async function main() {
 
     if (Array.isArray(work.stills)) {
       work.stills.forEach((still) => {
-        if (checkFileNameOnly(work, 'stills', still)) {
-          checkImageFile(work, 'still', still)
+        if (checkFileNameOnly(work, 'stills', still, label)) {
+          checkImageFile('still', still, label)
         }
       })
     }
 
-    if (work.vimeoEmbedUrl) {
-      if (isLocalComputerPath(work.vimeoEmbedUrl)) {
-        addError(`${label}：vimeoEmbedUrl 不要写电脑本地路径。`)
-      }
-      if (!work.vimeoEmbedUrl.startsWith('https://player.vimeo.com/video/')) {
-        addError(`${label}：vimeoEmbedUrl 必须以 https://player.vimeo.com/video/ 开头，不要粘贴整段 iframe。`)
-      }
-    }
+    checkEmbedUrl(
+      work,
+      'youtubeEmbedUrl',
+      label,
+      (value) => youtubeEmbedPrefixes.some((prefix) => value.startsWith(prefix)),
+      `youtubeEmbedUrl 必须以 ${youtubeEmbedPrefixes.join(' 或 ')} 开头。`,
+    )
+
+    checkEmbedUrl(
+      work,
+      'vimeoEmbedUrl',
+      label,
+      (value) => value.startsWith('https://player.vimeo.com/video/'),
+      'vimeoEmbedUrl 必须以 https://player.vimeo.com/video/ 开头。',
+    )
+
+    checkEmbedUrl(
+      work,
+      'bilibiliEmbedUrl',
+      label,
+      (value) => value.startsWith('https://player.bilibili.com/player.html'),
+      'bilibiliEmbedUrl 必须以 https://player.bilibili.com/player.html 开头。',
+    )
+
+    checkWatchUrl(work, 'youtubeWatchUrl', label)
+    checkWatchUrl(work, 'bilibiliWatchUrl', label)
   })
 
   if (warnings.length > 0) {

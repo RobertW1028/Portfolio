@@ -1,2 +1,27 @@
 [
+  {
+    "id": "work-001",
+    "slug": "trial-1",
+    "title": "trial 1",
+    "year": "2026",
+    "duration": "666",
+    "format": "color",
+    "medium": "film",
+    "poster": "11.jpg",
+    "image": "11.jpg",
+    "stills": [
+      "11.jpg"
+    ],
+    "youtubeEmbedUrl": "https://www.youtube.com/embed/QCVgh_2VVLc",
+    "youtubeWatchUrl": "https://www.youtube.com/watch?v=QCVgh_2VVLc",
+    "synopsis": "woaita",
+    "description": "woaita",
+    "credits": [
+      "woaini"
+    ],
+    "screeningHistory": [],
+    "category": "film",
+    "featured": true,
+    "featuredOrder": 1
+  }
 ]

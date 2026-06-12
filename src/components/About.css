@@ -6,7 +6,7 @@
 }
 
 .bio-portrait-wrap {
-  width: min(260px, 100%);
+  width: min(208px, 80%);
   justify-self: end;
 }
 
@@ -55,7 +55,7 @@
   }
 
   .bio-portrait-wrap {
-    max-width: 320px;
+    max-width: 256px;
   }
 
   .bio-copy {

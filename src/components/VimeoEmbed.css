@@ -1,17 +1,17 @@
-.vimeo-embed,
-.vimeo-placeholder {
+.work-video-embed,
+.work-video-embed-placeholder {
   width: 100%;
   aspect-ratio: 16 / 9;
   margin-top: 40px;
 }
 
-.vimeo-embed iframe {
+.work-video-embed iframe {
   width: 100%;
   height: 100%;
   border: 0;
   display: block;
 }
 
-.vimeo-placeholder {
+.work-video-embed-placeholder {
   background-color: #f3f3f1;
 }

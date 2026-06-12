@@ -21,7 +21,7 @@ export const siteContent = {
     title: 'Days After Mekong Hotel',
     year: '2026',
     image: '/images/home/home-still.jpg',
-    alt: 'Film still',
+    alt: 'Film still from Days After Mekong Hotel',
   },
 
   // About / Bio：关于我的详细介绍。
