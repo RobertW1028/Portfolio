@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getWorkPosterSrc } from '../data/works'
+import { getWorkCoverSrc } from '../data/works'
 import './Works.css'
 
 export default function WorkCard({ work }) {
   const [imageFailed, setImageFailed] = useState(false)
-  const posterSrc = getWorkPosterSrc(work)
+  const posterSrc = getWorkCoverSrc(work)
   const hasDetailPage = Boolean(work.slug)
   const CardElement = hasDetailPage ? Link : 'div'
   const cardProps = hasDetailPage ? { to: `/works/${work.slug}` } : {}

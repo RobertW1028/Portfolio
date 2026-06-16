@@ -7,10 +7,11 @@
     "duration": "666",
     "format": "color",
     "medium": "film",
-    "poster": "11.jpg",
-    "image": "11.jpg",
+    "poster": "work-001/poster.jpg",
+    "image": "work-001/poster.jpg",
+    "cover": "work-001/poster.jpg",
     "stills": [
-      "11.jpg"
+      "work-001/still-01.jpg"
     ],
     "youtubeEmbedUrl": "https://www.youtube.com/embed/QCVgh_2VVLc",
     "youtubeWatchUrl": "https://www.youtube.com/watch?v=QCVgh_2VVLc",
@@ -23,5 +24,39 @@
     "category": "film",
     "featured": true,
     "featuredOrder": 1
+  },
+  {
+    "id": "daysaftermekonghotel",
+    "slug": "daysaftermekonghotel",
+    "title": "Days after Mekong Hotel",
+    "year": "2026",
+    "duration": "10:36",
+    "format": "Color, Stereo",
+    "medium": "Film",
+    "poster": "daysaftermekonghotel/poster.jpg",
+    "image": "daysaftermekonghotel/poster.jpg",
+    "cover": "daysaftermekonghotel/still-04.jpg",
+    "stills": [
+      "daysaftermekonghotel/still-01.jpg",
+      "daysaftermekonghotel/still-02.jpg",
+      "daysaftermekonghotel/still-03.jpg",
+      "daysaftermekonghotel/still-04.jpg"
+    ],
+    "youtubeEmbedUrl": "https://www.youtube.com/embed/YiV5sMkxz6M",
+    "youtubeWatchUrl": "https://www.youtube.com/watch?v=YiV5sMkxz6M",
+    "synopsis": "Days after Mekong Hotel takes place in Nong Khai, a small town in northeastern Thailand, where Laos can be seen across the Mekong River. A couple spends their vacation there. Between the hotel room, the bathroom, the balcony, and the riverside walkway, fragments of dialogue gradually surface: a scar on the body, the memory of following a grandmother with Alzheimer's, and the voice of an old lover who seems to return like a ghost.\n\nAs the Mekong River continues to flow beyond the frame, the film moves between intimacy, memory, and haunting. Rather than explaining these fragments, it allows them to drift like water, leaving traces between disappearance and reincarnation.",
+    "description": "Days after Mekong Hotel takes place in Nong Khai, a small town in northeastern Thailand, where Laos can be seen across the Mekong River. A couple spends their vacation there. Between the hotel room, the bathroom, the balcony, and the riverside walkway, fragments of dialogue gradually surface: a scar on the body, the memory of following a grandmother with Alzheimer's, and the voice of an old lover who seems to return like a ghost.\n\nAs the Mekong River continues to flow beyond the frame, the film moves between intimacy, memory, and haunting. Rather than explaining these fragments, it allows them to drift like water, leaving traces between disappearance and reincarnation.",
+    "filemakerStatement": "I once asked my teacher a question: suppose there was an exact date after which you would lose all your memories. Would you be more afraid that others would still remember you, or that you would no longer remember them?\n\nI remember him standing in front of the floor-to-ceiling window by the elevator. Sunlight fell on the side of his face, tinting his silver hair with a layer of gold. He thought for a moment, then told me he was more afraid of the former. So was I.\n\nIt is hard for me to imagine the fear that those who know me would feel when they looked at my still-familiar face. They would remember the time we had spent together, while I would no longer be able to respond. All the closeness that came too late would eventually become futile. Thinking about this, I feel afraid for them. But for me, after losing all my memories, I might face the world again like a newborn child. If I no longer knew what I had lost, what would there be to fear?\n\nI wandered aimlessly through Nong Khai, with the Mekong River flowing slowly beside my feet, and Laos just across the water. The Thai-Lao Friendship Bridge, steam boats, hotel balconies, and humid air made everything feel as if it were in the middle of saying goodbye. This was once a place where Apichatpong stayed while filming Mekong Hotel. When I arrived here, I realized that I was not simply revisiting that film, but touching an aftershock that had still not disappeared after many years.\n\nDays after Mekong Hotel begins from this fear: when memories continue to fade, when former lovers decide never to see each other again, when humans and ghosts say goodbye silently by the Mekong River, would they also feel afraid because they still remember each other, or because they are destined to forget?",
+    "credits": [
+      "Written and Shot by: Yuezheng Wang",
+      "Edited by: Yuezheng Wang",
+      "Voices: Yuezheng Wang, David Li, Zoey Yang",
+      "Sound Design: Yuezheng Wang",
+      "Colorist: Da Zhang"
+    ],
+    "screeningHistory": [],
+    "category": "film",
+    "featured": false,
+    "featuredOrder": null
   }
 ]

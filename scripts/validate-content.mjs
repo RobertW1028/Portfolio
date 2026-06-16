@@ -37,6 +37,7 @@ const stringFields = [
   'format',
   'medium',
   'poster',
+  'cover',
   'image',
   'youtubeEmbedUrl',
   'youtubeWatchUrl',
@@ -52,6 +53,7 @@ const allowedCategories = ['video', 'film', 'installation', 'photography', 'othe
 const allowedImageExtensions = ['.jpg', '.jpeg', '.png', '.webp']
 const imageWarningSize = 5 * 1024 * 1024
 const safeFileNamePattern = /^[a-z0-9._-]+$/
+const safePathPattern = /^[a-z0-9._/-]+$/
 const slugPattern = /^[a-z0-9-]+$/
 const youtubeEmbedPrefixes = [
   'https://www.youtube.com/embed/',
@@ -75,7 +77,9 @@ function isLocalComputerPath(value) {
 }
 
 function hasPathPrefix(value) {
-  return value.startsWith('/') || value.includes('/')
+  // 禁止绝对路径（以 / 开头）
+  // 允许相对路径（包含 / 但不以 / 开头）
+  return value.startsWith('/')
 }
 
 function hasIframe(value) {
@@ -106,8 +110,15 @@ function checkFileNameOnly(work, fieldName, value, label) {
     addError(`${label}：${fieldName} 不要写 public/images/works/，请只写文件名。当前值：${value}`)
   }
 
-  if (!safeFileNamePattern.test(value)) {
-    addError(`${label}：${fieldName} 文件名只建议使用英文小写、数字、短横线、下划线和点号。当前值：${value}`)
+  // 允许相对路径（如 work-001/poster.jpg）或直接文件名
+  // 检查整个路径是否匹配安全模式
+  if (!safePathPattern.test(value)) {
+    addError(`${label}：${fieldName} 只建议使用英文小写、数字、短横线、下划线、点号和斜杠。当前值：${value}`)
+  }
+
+  // 验证路径中不包含 ../ 或其他危险模式
+  if (value.includes('..')) {
+    addError(`${label}：${fieldName} 不能包含 .. 路径。当前值：${value}`)
   }
 
   const extension = path.extname(value).toLowerCase()
@@ -120,6 +131,14 @@ function checkFileNameOnly(work, fieldName, value, label) {
 
 function checkImageFile(fieldName, fileName, label) {
   const filePath = path.join(imageDir, fileName)
+
+  // 安全检查：确保路径不会超出 imageDir
+  const normalizedFilePath = path.normalize(filePath)
+  const normalizedImageDir = path.normalize(imageDir)
+  if (!normalizedFilePath.startsWith(normalizedImageDir)) {
+    addError(`${label}：${fieldName} 路径不安全。当前值：${fileName}`)
+    return
+  }
 
   if (!existsSync(filePath)) {
     addError(`${label}：找不到 ${fieldName}：public/images/works/${fileName}`)
@@ -241,6 +260,10 @@ async function main() {
 
     if (work.poster && checkFileNameOnly(work, 'poster', work.poster, label)) {
       checkImageFile('poster', work.poster, label)
+    }
+
+    if (work.cover && checkFileNameOnly(work, 'cover', work.cover, label)) {
+      checkImageFile('cover', work.cover, label)
     }
 
     if (work.image && checkFileNameOnly(work, 'image', work.image, label)) {
