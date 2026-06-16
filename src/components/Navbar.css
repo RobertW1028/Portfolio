@@ -7,10 +7,11 @@
 }
 
 .navbar-content {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   padding: 1.1rem 0;
+  column-gap: 1rem;
 }
 
 .navbar-logo,
@@ -22,14 +23,47 @@
   font-size: 0.95rem;
   font-weight: 500;
   color: #333;
+  justify-self: start;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .navbar-logo,
+.navbar-icon-link,
 .nav-links a {
   -webkit-tap-highlight-color: transparent;
 }
 
+.navbar-icon-link,
+.navbar-icon-link:visited,
+.navbar-icon-link:hover,
+.navbar-icon-link:active,
+.navbar-icon-link:focus {
+  color: #333;
+  text-decoration: none;
+}
+
+.navbar-icon-link {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.navbar-icon-link:hover {
+  opacity: 0.75;
+}
+
+.navbar-icon {
+  display: block;
+  width: clamp(24px, 2.2vw, 34px);
+  height: auto;
+  object-fit: contain;
+}
+
 .navbar-logo:focus-visible,
+.navbar-icon-link:focus-visible,
 .nav-links a:focus-visible {
   outline: 1px solid currentColor;
   outline-offset: 4px;
@@ -39,8 +73,10 @@
   display: flex;
   list-style: none;
   gap: 1.8rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-end;
+  justify-self: end;
+  min-width: 0;
 }
 
 .nav-links a {
@@ -50,18 +86,72 @@
   transition: color 0.3s ease;
 }
 
+.nav-links a:visited {
+  color: #666;
+}
+
 .nav-links a:hover,
+.nav-links a:active,
+.nav-links a:focus,
 .nav-links a.active {
   color: #333;
 }
 
 @media (max-width: 768px) {
   .navbar-content {
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: center;
+    column-gap: 0.75rem;
   }
 
   .nav-links {
-    gap: 0.8rem 1.2rem;
+    gap: 1.1rem;
+  }
+
+  .navbar-icon {
+    width: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar .container {
+    padding: 0 12px;
+  }
+
+  .navbar-content {
+    column-gap: 0.5rem;
+  }
+
+  .navbar-logo {
+    font-size: 0.82rem;
+  }
+
+  .nav-links {
+    gap: 0.75rem;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+  }
+
+  .navbar-icon {
+    width: 22px;
+  }
+}
+
+@media (max-width: 360px) {
+  .navbar-logo {
+    font-size: 0.78rem;
+  }
+
+  .nav-links {
+    gap: 0.55rem;
+  }
+
+  .nav-links a {
+    font-size: 0.74rem;
+  }
+
+  .navbar-icon {
+    width: 20px;
   }
 }

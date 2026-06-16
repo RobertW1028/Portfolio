@@ -10,6 +10,16 @@ export default function Navbar() {
           <Link className="navbar-logo" to="/">
             {siteContent.name}
           </Link>
+          {siteContent.brandIcon && (
+            <Link className="navbar-icon-link" to="/" aria-label={`${siteContent.name} home`}>
+              <img
+                className="navbar-icon"
+                src={siteContent.brandIcon}
+                alt=""
+                aria-hidden="true"
+              />
+            </Link>
+          )}
           <ul className="nav-links">
             <li><NavLink to="/works">Works</NavLink></li>
             <li><NavLink to="/about">Bio</NavLink></li>

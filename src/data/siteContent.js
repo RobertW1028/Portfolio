@@ -8,6 +8,8 @@ export const siteContent = {
   // 我的姓名：会显示在首页最醒目的位置。
   name: 'Yuezheng Wang',
 
+  brandIcon: '/images/branding/yw-icon.png',
+
   // 我的身份 / 简介短句：会显示在首页姓名下方。
   tagline: '',
 
