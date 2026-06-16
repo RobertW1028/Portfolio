@@ -15,13 +15,14 @@ export const siteContent = {
   intro:
     '',
 
-  // 首页封面作品：当 src/data/works.json 里暂时没有作品时，首页会使用这里。
-  // image 只写 public/images/works/ 里的文件名，不要写电脑本地路径。
+  // 首页封面作品：image 固定使用 public/images/home/ 里的图片，文字和链接优先读取 works.json。
+  // workSlug 要和 src/data/works.json 里对应作品的 slug 完全一致。
   homeFeature: {
-    title: 'Days After Mekong Hotel',
-    year: '2026',
     image: '/images/home/home-still.jpg',
+    workSlug: 'daysaftermekonghotel',
     alt: 'Film still from Days After Mekong Hotel',
+    fallbackTitle: 'Days After Mekong Hotel',
+    fallbackYear: '2026',
   },
 
   // About / Bio：关于我的详细介绍。

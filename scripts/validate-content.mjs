@@ -2,10 +2,12 @@ import { existsSync, statSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { siteContent } from '../src/data/siteContent.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(__dirname, '..')
 const worksPath = path.join(projectRoot, 'src', 'data', 'works.json')
+const publicDir = path.join(projectRoot, 'public')
 const imageDir = path.join(projectRoot, 'public', 'images', 'works')
 
 const requiredFields = [
@@ -151,6 +153,49 @@ function checkImageFile(fieldName, fileName, label) {
   }
 }
 
+function checkHomeFeature(works) {
+  const homeFeature = siteContent.homeFeature || {}
+  const homeFeatureSlug = siteContent.homeFeatureWorkSlug || homeFeature.workSlug
+
+  if (homeFeatureSlug) {
+    if (works.length === 0) {
+      addWarning('homeFeature.workSlug is set, but works.json is empty. The homepage will use fallback text.')
+    } else if (!works.some((work) => work.slug === homeFeatureSlug)) {
+      addError(`homeFeature.workSlug does not match any work slug: ${homeFeatureSlug}`)
+    }
+  }
+
+  if (!homeFeature.image) {
+    return
+  }
+
+  if (typeof homeFeature.image !== 'string') {
+    addError('homeFeature.image must be a string.')
+    return
+  }
+
+  if (isLocalComputerPath(homeFeature.image)) {
+    addError(`homeFeature.image must not use a local computer path. Current value: ${homeFeature.image}`)
+    return
+  }
+
+  const publicImagePath = homeFeature.image.startsWith('/')
+    ? homeFeature.image.slice(1)
+    : path.join('images', 'home', homeFeature.image)
+  const imagePath = path.join(publicDir, publicImagePath)
+  const normalizedImagePath = path.normalize(imagePath)
+  const normalizedPublicDir = path.normalize(publicDir)
+
+  if (!normalizedImagePath.startsWith(normalizedPublicDir)) {
+    addError(`homeFeature.image path is not safe. Current value: ${homeFeature.image}`)
+    return
+  }
+
+  if (!existsSync(imagePath)) {
+    addError(`homeFeature.image file was not found: public/${publicImagePath}`)
+  }
+}
+
 function checkEmbedUrl(work, field, label, isValid, message) {
   const value = work[field]
 
@@ -202,6 +247,8 @@ async function main() {
     console.error('src/data/works.json 最外层必须是数组。')
     process.exit(1)
   }
+
+  checkHomeFeature(works)
 
   const ids = new Set()
   const slugs = new Set()

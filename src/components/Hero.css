@@ -14,13 +14,18 @@
 
 .home-feature-link {
   display: block;
-  color: #333;
+  color: inherit;
+  text-decoration: none;
   transition: opacity 0.25s ease;
 }
 
 a.home-feature-link:hover {
   opacity: 0.82;
-  color: #333;
+}
+
+.home-feature-link:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 6px;
 }
 
 .home-feature-image {
