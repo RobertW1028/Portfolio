@@ -39,7 +39,7 @@ export const siteContent = {
 
   // 联系方式：修改邮箱或社交媒体链接就在这里。
   contact: {
-    email: 'wyz15905@gmail.com',
+    email: 'yuezhengwangfilm@gmail.com',
     contactMessage:
       'For collaborations, screenings, project inquiries, or other questions, please contact me via email or social media.',
     socialLinks: [
