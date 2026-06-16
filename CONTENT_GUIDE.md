@@ -76,6 +76,8 @@
 
 `description`：兼容旧数据的字段。通常让它和 `synopsis` 一样。
 
+`filemakerStatement`：导演阐述 / 创作自述，可选。如果有内容会在 synopsis 下面显示。
+
 `credits`：字幕 / 制作人员数组，可以写导演、摄影、声音、剪辑、演员等，例如 `["Director: Yuezheng Wang", "Sound: Name"]`。
 
 `screeningHistory`：放映经历数组，可选。例如 `["2026, Festival Name, City"]`。
@@ -89,6 +91,8 @@
 ## 四、如何添加 Vimeo 视频作品
 
 推荐按下面步骤添加 video / film project：
+
+### 第一步：上传视频到 Vimeo
 
 1. 先把完整视频上传到 Vimeo。
 
@@ -116,26 +120,125 @@ https://player.vimeo.com/video/123456789
 
 5. 不要把大视频直接上传到 GitHub。
 
-6. 把 poster 和 stills 放到：
+### 第二步：创建作品文件夹并准备图片
 
-`public/images/works/`
+1. **创建文件夹** - 在 `public/images/works/` 里为这个作品创建一个独立文件夹
 
-7. 在 `src/data/works.json` 里添加作品信息，或运行添加工具：
+   文件夹名字建议和 id / slug 保持一致，例如：
+   
+   - 作品 id 是 `my-new-film`，就创建文件夹 `public/images/works/my-new-film/`
+   - 作品 id 是 `work-002`，就创建文件夹 `public/images/works/work-002/`
+   
+   **在 VS Code 中创建文件夹的方式：**
+   
+   - 右键点击 `public/images/works/` 文件夹
+   - 选择 "新建文件夹"
+   - 输入文件夹名字（例如 `my-new-film`）
+   - 确认创建
+   
+   **或者用命令行创建：**
+   
+   ```bash
+   mkdir -p public/images/works/my-new-film
+   ```
 
-```bash
-npm.cmd run add-work
+2. **准备作品图片** - 在刚创建的文件夹里放入图片文件：
+
+   - **封面图（必选）**：这是在作品列表页（Works）显示的卡片图片。
+     - 建议宽度 > 高度（16:9 或类似比例，如 landscape）
+     - 命名建议：`cover.jpg` 或 `still-04.jpg` （选一张合适的 still 作为封面）
+     - 存放在 `public/images/works/[作品-id]/`
+   
+   - **Poster 图（可选）**：可以是竖版、方版、或其他比例，展示在作品详情页。
+     - 如果没有专门的 poster，可以省略这个字段
+     - 如果有 poster，存放在 `public/images/works/[作品-id]/`
+   
+   - **Stills 图**：作品的其他截帧或静态图片，展示在详情页下方。
+     - 推荐 2-4 张
+     - 命名建议：`still-01.jpg`, `still-02.jpg`, 等
+
+### 第三步：添加作品数据到 works.json
+
+在 `src/data/works.json` 里添加作品信息。需要填写以下字段：
+
+   - `cover`：选择用于列表卡片的图片文件名（**必选**）- 格式：`work-id/cover.jpg`
+   - `poster`：可选，如果有专门的 poster 就填，没有可以留空或不填 - 格式：`work-id/poster.jpg`
+   - `stills`：其他静帧文件名数组（可选）- 格式：`["work-id/still-01.jpg", "work-id/still-02.jpg"]`
+
+**例如：**
+   
+```json
+{
+  "id": "my-new-film",
+  "slug": "my-new-film",
+  "title": "My New Film",
+  "year": "2026",
+  "duration": "10:36",
+  "format": "Color, Stereo",
+  "medium": "Film",
+  "cover": "my-new-film/still-04.jpg",
+  "poster": "my-new-film/poster.jpg",
+  "stills": ["my-new-film/still-01.jpg", "my-new-film/still-02.jpg"],
+  "vimeoEmbedUrl": "https://player.vimeo.com/video/123456789",
+  "synopsis": "作品简介...",
+  "credits": ["Director: Your Name"],
+  "featured": false,
+  "featuredOrder": null
+}
 ```
 
-8. 本地运行检查：
+**或者没有 poster：**
+   
+   
+   ```json
+   {
+     "id": "new-work",
+     "slug": "new-work",
+     "title": "New Work",
+     "cover": "new-work/cover.jpg",
+     "stills": ["new-work/still-01.jpg"]
+   }
+   ```
+
+### 第四步：本地检查
+
+运行验证和构建检查：
 
 ```bash
-npm.cmd run validate-content
-npm.cmd run build
+npm run validate-content
+npm run build
 ```
 
-9. Push 到 GitHub。
+如果提示任何错误，检查：
+- 文件夹名是否拼写正确
+- JSON 中的路径是否与实际文件夹一致
+- 所有文件是否真的存在
 
-10. Netlify 会自动更新网站。
+### 第五步：提交到 GitHub
+
+通过 Git 提交所有改动：
+
+```bash
+git add .
+git commit -m "Add new work: [作品名字]"
+git push origin [你的分支名]
+```
+
+然后在 GitHub 上创建 Pull Request。
+
+Netlify 会自动检查和部署。部署完成后，访问 `https://yuezhengwang.com/#/works/[slug]` 查看你的新作品。
+
+### 完整工作流程总结
+
+1. 创建文件夹 `public/images/works/work-xxx/`
+2. 把图片（cover、poster、stills）放入文件夹
+3. 在 `src/data/works.json` 中添加作品数据
+4. 运行 `npm run validate-content` 和 `npm run build` 检查
+5. `git add .` → `git commit` → `git push` 提交
+6. 在 GitHub 创建 PR
+7. 等待 Netlify 自动部署完成
+
+**Vimeo 域名限制：**
 
 如果 Vimeo 限制嵌入域名，请在 Vimeo 设置里允许：
 
@@ -188,13 +291,44 @@ npm.cmd run build
 
 ## 六、图片和视频存放规则
 
+### 文件夹结构
+
+为了保持文件夹整洁，建议按作品创建独立的文件夹来管理 poster 和 stills。
+
+推荐结构：
+
+```
+public/images/works/
+  work-001/
+    poster.jpg
+    still-01.jpg
+    still-02.jpg
+  work-002/
+    poster.jpg
+    still-01.jpg
+  ...
+```
+
+在 `src/data/works.json` 中，这样引用：
+
+```json
+{
+  "id": "work-001",
+  "poster": "work-001/poster.jpg",
+  "image": "work-001/poster.jpg",
+  "stills": ["work-001/still-01.jpg", "work-001/still-02.jpg"]
+}
+```
+
+### 存放位置
+
 poster 放在：
 
-`public/images/works/`
+`public/images/works/[作品-id]/`
 
 stills 放在：
 
-`public/images/works/`
+`public/images/works/[作品-id]/`
 
 大视频不要放 GitHub，推荐上传到 Vimeo。
 

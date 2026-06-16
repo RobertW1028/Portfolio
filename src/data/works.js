@@ -19,6 +19,10 @@ export function getWorkPosterSrc(work) {
   return getWorkImageSrc(work.poster || work.image || still)
 }
 
+export function getWorkCoverSrc(work) {
+  return getWorkImageSrc(work.cover || work.poster || work.image)
+}
+
 export function getWorkVideoSrc(video) {
   if (!video) {
     return ''

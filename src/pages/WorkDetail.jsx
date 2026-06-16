@@ -10,9 +10,22 @@ function getWorkMeta(work) {
 }
 
 function getSynopsisParagraphs(work) {
-  return [work.synopsis, work.description]
+  const texts = [work.synopsis, work.description]
     .filter(Boolean)
     .filter((text, index, list) => list.indexOf(text) === index)
+  
+  // 把每个文本按段落分割
+  return texts.flatMap(text => 
+    text.split('\n\n').map(para => para.trim()).filter(Boolean)
+  )
+}
+
+function getFilmmakerStatement(work) {
+  const statement = work.filemakerStatement || ''
+  if (!statement.trim()) return []
+  
+  // 把 statement 按段落分割
+  return statement.split('\n\n').map(para => para.trim()).filter(Boolean)
 }
 
 function getCredits(credits) {
@@ -47,6 +60,10 @@ function getScreeningHistory(screeningHistory) {
   return Array.isArray(screeningHistory) ? screeningHistory.filter(Boolean) : []
 }
 
+function getPoster(work) {
+  return work.poster || work.image ? [work.poster || work.image] : []
+}
+
 export default function WorkDetail() {
   const { slug } = useParams()
   const work = getWorkBySlug(slug)
@@ -64,7 +81,9 @@ export default function WorkDetail() {
 
   const metadata = getWorkMeta(work)
   const synopsisParagraphs = getSynopsisParagraphs(work)
+  const filemakerStatement = getFilmmakerStatement(work)
   const credits = getCredits(work.credits)
+  const poster = getPoster(work)
   const stills = getStillImages(work)
   const screeningHistory = getScreeningHistory(work.screeningHistory)
 
@@ -87,6 +106,15 @@ export default function WorkDetail() {
           </section>
         )}
 
+        {filemakerStatement.length > 0 && (
+          <section className="work-detail-section work-filmmaker-statement">
+            <h2 className="work-section-title">Filmmaker Statement</h2>
+            {filemakerStatement.map((statement) => (
+              <p key={statement}>{statement}</p>
+            ))}
+          </section>
+        )}
+
         {credits.length > 0 && (
           <section className="work-detail-section">
             <h2 className="work-section-title">Credits</h2>
@@ -95,6 +123,17 @@ export default function WorkDetail() {
                 <li key={credit}>{credit}</li>
               ))}
             </ul>
+          </section>
+        )}
+
+        {poster.length > 0 && (
+          <section className="work-detail-section work-poster">
+            <h2 className="work-section-title">Poster</h2>
+            <div className="work-poster-container">
+              {poster.map((posterImg) => (
+                <img key={posterImg} src={getWorkImageSrc(posterImg)} alt={`${work.title} poster`} />
+              ))}
+            </div>
           </section>
         )}
 
