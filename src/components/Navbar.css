@@ -4,6 +4,8 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  --navbar-brand-size: 0.95rem;
+  --navbar-link-size: 0.92rem;
 }
 
 .navbar-content {
@@ -20,10 +22,12 @@
 .navbar-logo:active,
 .navbar-logo:focus,
 .navbar-logo[aria-current="page"] {
-  font-size: 0.95rem;
+  font-size: var(--navbar-brand-size);
   font-weight: 500;
   color: #333;
+  line-height: 1;
   text-decoration: none;
+  transform: none;
   white-space: nowrap;
 }
 
@@ -42,16 +46,18 @@
   display: flex;
   list-style: none;
   gap: 1.8rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-end;
   min-width: 0;
 }
 
 .nav-links a {
-  font-size: 0.92rem;
+  font-size: var(--navbar-link-size);
   color: #666;
   font-weight: 400;
+  line-height: 1;
   transition: color 0.3s ease;
+  white-space: nowrap;
 }
 
 .nav-links a:visited {
@@ -66,8 +72,13 @@
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    --navbar-brand-size: 0.95rem;
+    --navbar-link-size: 0.86rem;
+  }
+
   .navbar-content {
-    align-items: flex-start;
+    align-items: center;
     gap: 1rem;
   }
 
@@ -77,6 +88,11 @@
 }
 
 @media (max-width: 480px) {
+  .navbar {
+    --navbar-brand-size: 0.9rem;
+    --navbar-link-size: 0.8rem;
+  }
+
   .navbar .container {
     padding: 0 12px;
   }
@@ -85,29 +101,18 @@
     gap: 0.75rem;
   }
 
-  .navbar-logo {
-    font-size: 0.82rem;
-  }
-
   .nav-links {
     gap: 0.75rem;
-  }
-
-  .nav-links a {
-    font-size: 0.8rem;
   }
 }
 
 @media (max-width: 360px) {
-  .navbar-logo {
-    font-size: 0.78rem;
+  .navbar {
+    --navbar-brand-size: 0.84rem;
+    --navbar-link-size: 0.74rem;
   }
 
   .nav-links {
     gap: 0.55rem;
-  }
-
-  .nav-links a {
-    font-size: 0.74rem;
   }
 }
