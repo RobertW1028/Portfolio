@@ -2,7 +2,14 @@
 .work-video-embed-placeholder {
   width: 100%;
   aspect-ratio: 16 / 9;
-  margin-top: 40px;
+  margin-top: 32px;
+}
+
+@media (max-width: 700px) {
+  .work-video-embed,
+  .work-video-embed-placeholder {
+    margin-top: 24px;
+  }
 }
 
 .work-video-embed iframe {
