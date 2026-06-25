@@ -25,16 +25,17 @@ export const siteContent = {
     fallbackYear: '2026',
   },
 
-  // About / Bio：关于我的详细介绍。
+  // About：关于我的详细介绍。
   // 如果想新增段落，就在 paragraphs 数组里多加一行文字。
   about: {
     heading: 'Yuezheng Wang',
-    // Bio 页面人物照片。真实照片可放在 public/images/bio/，这里写文件名即可，例如 'portrait.jpg'。
-    // 暂时留空时，Bio 页面会显示一个极简浅灰占位区域。
+  // About 页面人物照片。真实照片可放在 public/images/profile/，这里写文件名即可，例如 'portrait.jpg'。
+    // 暂时留空时，About 页面会显示一个极简浅灰占位区域。
     portraitImage: '/images/profile/portrait.jpg',
     paragraphs: [
-      '',
-      '',
+      'Yuezheng Wang (b. 2003) is a Chinese filmmaker from Wenzhou, China, currently based in Chicago. His films explore intimacy, memory, regional landscapes, and the fragile dynamics between people. Working with long takes, natural environments, and fragmented sound, he is interested in how cinema can preserve shifting relationships, disappearing places, and traces of time.',
+      'I am a Chinese filmmaker who primarily writes, directs, and shoots short films. My work takes human relationships within small groups as its starting point, focusing on the unstable transitions between people: the subtle movements of closeness, distance, intimacy, and estrangement. My work is concerned with the tension that emerges and deepens within relationships, and with how this tension can open up the aesthetic possibilities of cinema.',
+      'In my creative process, I often employ long takes, natural environments, and fragmented sound as key methods. Through the stretching of time, the contemplation of space, and a restrained audiovisual language, I seek to create a cinematic world shaped by my own experiences of growth, displacement, and memory, while also engaging with the regional landscapes and cultural textures of East and Southeast Asia. Elements such as time, memory, ghosts, reincarnation, rainforests, and rivers recur frequently, serving both as images with independent significance and as interconnected threads within the film’s structure, sound, and visuals, gradually coalescing into an indivisible whole.',
     ],
   },
 
