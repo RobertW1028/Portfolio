@@ -83,12 +83,14 @@
 
   .about-portrait-wrap {
     max-width: 256px;
+    order: -1;
   }
 
   .about-copy {
     max-width: none;
     text-align: left;
     margin-left: 0;
+    order: 0;
   }
 
   .about-copy p {

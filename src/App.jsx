@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import HomePage from './pages/HomePage'
 import AllWorksPage from './pages/AllWorksPage'
@@ -9,6 +9,16 @@ import ContactPage from './pages/ContactPage'
 import { siteContent } from './data/siteContent'
 import './App.css'
 
+function ScrollToTop() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
+  return null
+}
+
 function AppRoutes() {
   useEffect(() => {
     document.title = siteContent.siteTitle
@@ -17,6 +27,7 @@ function AppRoutes() {
   return (
     <>
       <Navbar />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/works" element={<AllWorksPage />} />
