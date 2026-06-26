@@ -142,7 +142,7 @@
 
   .work-detail-section {
     width: 100%;
-    margin-top: 48px;
+    margin-top: 0;
   }
 
   .work-section-title {
@@ -164,11 +164,11 @@
 
   .work-video-embed,
   .work-video-embed-placeholder {
-    margin-top: 24px;
+    margin-top: 16px;
   }
 
   .work-poster-container img {
-    max-width: 90%;
+    max-width: 67.5%;
   }
 
   .work-stills-grid {
